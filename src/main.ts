@@ -1,4 +1,5 @@
 import fs from 'fs'; // necesitado para guardar/cargar unqfy
+import {argv} from './commands_unqfy';
 import {UNQfy} from './unqfy'; // importamos el modulo unqfy
 
 // Retorna una instancia de UNQfy. Si existe filename, recupera la instancia desde el archivo.
@@ -44,9 +45,32 @@ function saveUNQfy(unqfy: UNQfy, filename = 'data.json') {
 
 */
 
+function addArtist(unqfy: UNQfy, argv: any) {
+    let name = argv.name;
+    let country = argv.country;
+    try{
+        let artist = unqfy.addArtist({name, country});
+        console.log(artist);
+    } catch(e) {
+        console.log(`Error: ${e.message}`);
+    }
+}
+
 function main() {
-    console.log('arguments: ');
-    process.argv.forEach(argument => console.log(argument));
+    let unqfy = getUNQfy();
+    let command = argv._[0];
+
+    switch(command) {
+        case 'addArtist': 
+            addArtist(unqfy, argv);
+            break;
+
+        default:
+            console.log('Operación desconocida.');
+            console.log('--help     para ver los comandos')
+    }
+
+    saveUNQfy(unqfy);
 }
 
 main();
