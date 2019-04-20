@@ -21,19 +21,20 @@ Para ejecutar el main debemos ingresar `ts-node <dir main.ts>` junto a los coman
 ```bash
 ts-node src/main [> args]
 ```  
-
-
-***Comandos***   
-* help: Muestra todos los comandos disponibles  
-```bash
-ts-node src/main addArtist --help
-```
-
-* addArtist: Crea un nuevo artista
-```bash
-ts-node src/main addArtist --name '{nombre del artista}' --country '{país del artista}'
-```
   
+Para ver los comandos disponibles ingresar en la consola  
+```bash
+ts-node src/main --help
+```  
+Si queremos cargar pre-cargar datos podemos usar el script build, este ejecutará todos los comandos para cargar artistas, albumes, tracks y playlist guardados en el archivo `datos.sh`.  
+Para poder usar correctamente el build, primero debemos darle permisos a `datos.sh`
+```bash
+chmod +x datos.sh
+```  
+Luego para ejecutar la pre-carga de datos
+```bash
+npm run build
+```  
 
 **Testing**  
 Para ejecutar los test deberemos ingresar en consola `npm test`, nos printeara los test indicando cuales pasaron y cuales no
