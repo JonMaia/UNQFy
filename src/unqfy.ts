@@ -28,6 +28,17 @@ export class UNQfy {
         }
     }
 
+    public deleteArtist(name: string) {
+        let artist = this.findArtistByName(name);
+        if(artist !== undefined) {
+            this.artists.splice(this.artists.indexOf(artist), 1)
+        }
+    }
+
+    public existsArtist(name: string): boolean {
+        return this.artists.some(artist => artist.name === name);
+    }
+
     private findArtistByName(name: string): Artist | undefined {
         return this.artists.find(artist => artist.name === name);
     }
