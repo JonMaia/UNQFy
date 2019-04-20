@@ -56,6 +56,21 @@ function addArtist(unqfy: UNQfy, argv: any) {
     }
 }
 
+function deleteArtist(unqfy: UNQfy, argv: any) {
+    let name = argv.name;
+    unqfy.deleteArtist(name);
+    console.log(`El artista '${name}' fue borrado.`);
+}
+
+function getArtist(unqfy: UNQfy, argv: any) {
+    let artists = unqfy.getArtistsByNamePartial(argv.name);
+    if(artists.length > 0) {
+        console.log(artists);
+    } else {
+        console.log('No se encontraron artistas');
+    }
+}
+
 function main() {
     let unqfy = getUNQfy();
     let command = argv._[0];
@@ -65,6 +80,14 @@ function main() {
             addArtist(unqfy, argv);
             break;
 
+        case 'deleteArtist':
+            deleteArtist(unqfy, argv);
+            break;
+        
+        case 'getArtist':
+            getArtist(unqfy, argv);
+            break;
+        
         default:
             console.log('Operación desconocida.');
             console.log('--help     para ver los comandos')

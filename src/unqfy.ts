@@ -39,6 +39,10 @@ export class UNQfy {
         return this.artists.some(artist => artist.name === name);
     }
 
+    public getArtistsByNamePartial(name: string): Array<Artist> {
+        return this.artists.filter(artist => artist.name.includes(name));
+    }
+
     private findArtistByName(name: string): Artist | undefined {
         return this.artists.find(artist => artist.name === name);
     }
