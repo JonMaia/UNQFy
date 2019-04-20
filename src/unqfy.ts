@@ -1,26 +1,36 @@
 const picklify = require('picklify'); // para cargar/guarfar unqfy
 import fs from 'fs'; // para cargar/guarfar unqfy
-import AdminArtist from './admin/admin_artist'
 import {Artist} from './model/artist';
 import {ArtistInterface} from './model/interfaces';
 
 // COMPLETAR POR EL ALUMNO: exportar todas las clases que necesiten ser utilizadas desde un modulo cliente
 export class UNQfy {
     private listeners: any;
-    private adminArtist: AdminArtist;
+    private artists: Array<Artist>;
 
     constructor() {
-        this.adminArtist = new AdminArtist();
+        this.artists = new Array;
     }
 
     /**
-     * Crea un artista, lo agrega unqfy y lo retorna
+     * Crea un nuevo artista con los datos pasados por parametro, lo guarda y retorna.  
+     * Previamente, verifica que no exista un artista con el nombre pasado por parametro, si existe el artista lanza un error.
      * @param artistData - Debe tener mínimamente: name(string), country(string)
      */
     public addArtist(artistData: ArtistInterface): Artist {
-        return this.adminArtist.createArtist(artistData.name, artistData.country);
+        let artist = this.findArtistByName(artistData.name);
+        if(artist === undefined) {
+            let newArtist = new Artist(artistData.name, artistData.country);
+            this.artists.push(newArtist);
+            return newArtist;
+        } else {
+            throw new Error(`Ya existe el artista '${artistData.name}'`);
+        }
     }
 
+    private findArtistByName(name: string): Artist | undefined {
+        return this.artists.find(artist => artist.name === name);
+    }
 
     // albumData: objeto JS con los datos necesarios para crear un album
     //   albumData.name (string)
@@ -109,7 +119,7 @@ export class UNQfy {
     public static load(filename: string) {
         const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
         //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
-        const classes = [UNQfy, AdminArtist, Artist];
+        const classes = [UNQfy, Artist];
         return picklify.unpicklify(JSON.parse(serializedData), classes);
     }
 }

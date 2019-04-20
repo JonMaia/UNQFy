@@ -4,6 +4,7 @@
   "description": "",
   "main": "./dist/src/main.js",
   "dependencies": {
+    "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.6",
     "chai": "^4.1.2",
     "picklify": "github:lwoites/picklify",
