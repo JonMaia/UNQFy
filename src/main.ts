@@ -55,6 +55,18 @@ function addArtist(unqfy: UNQfy, argv: any) {
         console.log(`Error: ${e.message}`);
     }
 }
+function addAlbum(unqfy: UNQfy, argv: any) {
+    
+    let artist = argv.artist;
+    let name = argv.name;
+    let year = argv.year;
+    try{
+        let album = unqfy.addAlbum({artist ,name ,year});
+        console.log(album);
+    } catch(e) {
+        console.log(`Error: ${e.message}`);
+    }
+}
 
 function deleteArtist(unqfy: UNQfy, argv: any) {
     let name = argv.name;
@@ -70,6 +82,26 @@ function getArtist(unqfy: UNQfy, argv: any) {
         console.log('No se encontraron artistas');
     }
 }
+    
+function getAlbum(unqfy: UNQfy, argv: any) {
+    let album = unqfy.getAlbumByNamePartial(argv.name);
+    if(album.length > 0) {
+        console.log(album);
+    } else {
+        console.log('No se encontro el Album');
+    }
+
+}
+
+
+
+function deleteAlbum(unqfy: UNQfy, argv: any) {
+    let name = argv.name;
+    unqfy.deleteAlbum(name);
+    console.log(`El album '${name}' fue borrado.`);
+}
+
+
 
 function main() {
     let unqfy = getUNQfy();
@@ -86,6 +118,18 @@ function main() {
         
         case 'getArtist':
             getArtist(unqfy, argv);
+            break;
+
+        case 'getAlbum':
+            getAlbum(unqfy, argv);
+        break;     
+        
+        case 'addAlbum': 
+            addAlbum(unqfy, argv);
+            break; 
+
+        case 'deleteAlbum':
+            deleteAlbum(unqfy, argv);
             break;
         
         default:
