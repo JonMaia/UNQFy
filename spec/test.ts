@@ -8,7 +8,10 @@ function createAndAddArtist(unqfy: UNQfy, artistName: any, country: any) {
 }
 
 function createAndAddAlbum(unqfy: UNQfy, artistId: number, albumName: string, albumYear: number) {
-  return unqfy.addAlbum(artistId, { name: albumName, year: albumYear });
+ 
+   let artistName = unqfy.searchNameArtistById(artistId)
+ 
+  return unqfy.addAlbum({artist:artistName, name: albumName, year: albumYear });
 }
 
 function createAndAddTrack(unqfy: UNQfy, albumName: string, trackName: string, trackDuraction: any, trackGenres: any) {

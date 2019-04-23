@@ -61,6 +61,15 @@ export class UNQfy {
     public getAlbumByNamePartial(name: string): Array<Album> {
         return this.albumes.filter(album => album.name.includes(name));
     }
+
+
+    public addAlbumIdArtist (artistId: number, albumData:AlbumInterface): Album {
+
+        return this.addAlbum({artist: 'dd', name: albumData.name, year: albumData.year})
+       
+        
+    }
+
     public addAlbum(albumData: AlbumInterface): Album {  
 
         /* Crea un album y lo agrega al artista con id artistId.
@@ -94,8 +103,18 @@ export class UNQfy {
         private findAlbumByName(name: string): Album | undefined {
             return this.albumes.find(album => album.name === name);
         }
-    
+        
+        public searchNameArtistById(id: Number): string {
 
+            let artist = this.artists.find(artist => artist.id === id)
+            if(artist !== undefined) {
+                  return artist.name;
+             }else{
+            throw new Error(`El Artista con el id: '${id}' no existe`);
+            
+        }
+        
+    }
 
     // trackData: objeto JS con los datos necesarios para crear un track
     //   trackData.name (string)
