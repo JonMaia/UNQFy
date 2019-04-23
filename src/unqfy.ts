@@ -1,15 +1,20 @@
 const picklify = require('picklify'); // para cargar/guarfar unqfy
 import fs from 'fs'; // para cargar/guarfar unqfy
 import {Artist} from './model/artist';
-import {ArtistInterface} from './model/interfaces';
+import {ArtistInterface, AlbumInterface} from './model/interfaces';
+import { Album } from './model/album';
+
+
 
 // COMPLETAR POR EL ALUMNO: exportar todas las clases que necesiten ser utilizadas desde un modulo cliente
 export class UNQfy {
     private listeners: any;
     private artists: Array<Artist>;
+    private albumes: Array<Album>;
 
     constructor() {
         this.artists = new Array;
+        this.albumes = new Array;
     }
 
     /**
@@ -19,6 +24,7 @@ export class UNQfy {
      */
     public addArtist(artistData: ArtistInterface): Artist {
         let artist = this.findArtistByName(artistData.name);
+        
         if(artist === undefined) {
             let newArtist = new Artist(artistData.name, artistData.country);
             this.artists.push(newArtist);
@@ -51,14 +57,64 @@ export class UNQfy {
     //   albumData.name (string)
     //   albumData.year (number)
     // retorna: el nuevo album creado
-    public addAlbum(artistId: number, albumData: any) {
-    /* Crea un album y lo agrega al artista con id artistId.
-        El objeto album creado debe tener (al menos):
-        - una propiedad name (string)
-        - una propiedad year (number)
-    */
+
+    public getAlbumByNamePartial(name: string): Array<Album> {
+        return this.albumes.filter(album => album.name.includes(name));
     }
 
+
+    public addAlbumIdArtist (artistId: number, albumData:AlbumInterface): Album {
+
+        return this.addAlbum({artist: 'dd', name: albumData.name, year: albumData.year})
+       
+        
+    }
+
+    public addAlbum(albumData: AlbumInterface): Album {  
+
+        /* Crea un album y lo agrega al artista con id artistId.
+            El objeto album creado debe tener (al menos):
+            - una propiedad name (string)
+            - una propiedad year (number)
+        */
+            let album = this.findAlbumByName(albumData.name);
+            let artistDate = this.findArtistByName(albumData.artist)
+
+            if(artistDate !== undefined){
+                 if(album == undefined) {
+                      let newAlbum = new Album(artistDate, albumData.name, albumData.year);
+                      this.albumes.push(newAlbum);
+                      return newAlbum;
+                 } else {
+                     throw new Error(`Ya existe el album '${albumData.name}'`);
+                 }
+                } else{
+                    throw new Error(`El Artista '${albumData.name}' no existe debe crearlo`);
+                }
+        }
+    
+        public deleteAlbum(name: string) {
+            let album = this.findAlbumByName(name);
+            if(album !== undefined) {
+                this.albumes.splice(this.albumes.indexOf(album), 1)
+            }
+        }
+        
+        private findAlbumByName(name: string): Album | undefined {
+            return this.albumes.find(album => album.name === name);
+        }
+        
+        public searchNameArtistById(id: Number): string {
+
+            let artist = this.artists.find(artist => artist.id === id)
+            if(artist !== undefined) {
+                  return artist.name;
+             }else{
+            throw new Error(`El Artista con el id: '${id}' no existe`);
+            
+        }
+        
+    }
 
     // trackData: objeto JS con los datos necesarios para crear un track
     //   trackData.name (string)
@@ -134,7 +190,7 @@ export class UNQfy {
     public static load(filename: string) {
         const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
         //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
-        const classes = [UNQfy, Artist];
+        const classes = [UNQfy, Artist, Album];
         return picklify.unpicklify(JSON.parse(serializedData), classes);
     }
 }
