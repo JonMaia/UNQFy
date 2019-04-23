@@ -130,8 +130,8 @@ export class UNQfy {
     */
     }
 
-    public getArtistById(id: number) {
-
+    public getArtistById(id: number): Artist | undefined {
+        return this.artists.find(artist => artist.id === id);
     }
 
     public getAlbumById(id: number) {

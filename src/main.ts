@@ -75,11 +75,28 @@ function deleteArtist(unqfy: UNQfy, argv: any) {
 }
 
 function getArtist(unqfy: UNQfy, argv: any) {
-    let artists = unqfy.getArtistsByNamePartial(argv.name);
+    if(parseInt(argv.id) !== -1) {
+        findArtistById(unqfy, parseInt(argv.id));
+    } else {
+        findArtistByName(unqfy, argv.name);
+    }
+}
+
+function findArtistById(unqfy: UNQfy, id: number) {
+    let artist = unqfy.getArtistById(id);
+    if(artist !== undefined) {
+        console.log(artist);
+    } else {
+        console.log(`No se encontro artista con id: ${id}`);
+    }
+}
+
+function findArtistByName(unqfy: UNQfy, name: string) {
+    let artists = unqfy.getArtistsByNamePartial(name);
     if(artists.length > 0) {
         console.log(artists);
     } else {
-        console.log('No se encontraron artistas');
+        console.log(`No se encontraron artistas que matcheen con '${name}'`);
     }
 }
     

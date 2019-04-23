@@ -22,12 +22,18 @@ export const {argv} = require('yargs')
                     }
                 })
                 .example("$0 deleteArtist --name 'test'")
-                .command('getArtist', 'Busca y devuelve los artistas que coincidan con el nombre pasado. Permite búsqueda parcial ', {
+                .command('getArtist', 'Busca y devuelve los artistas que coincidan con el id o nombre pasado. Permite búsqueda parcial ', {
                     name: {
                         demand: false,
                         alias: 'n',
                         desc: 'Nombre parcial o completo del artista',
                         default: ''
+                    },
+                    id: {
+                        demand: false,
+                        alias: 'i',
+                        desc: 'Id del artista',
+                        default: '-1'
                     }
                 })
                 .example("$0 getArtist")
