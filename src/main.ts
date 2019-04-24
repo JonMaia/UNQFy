@@ -75,8 +75,13 @@ function deleteArtist(unqfy: UNQfy, argv: any) {
 }
 
 function getArtist(unqfy: UNQfy, argv: any) {
-    if(parseInt(argv.id) !== -1) {
-        findArtistById(unqfy, parseInt(argv.id));
+    let id = parseInt(argv.id);
+    if(isNaN(id)) {
+        console.log(`El id '${argv.id}' no es valido. Debe ingresar un número.`);
+        return;
+    }
+    if(id !== -1) {
+        findArtistById(unqfy, id);
     } else {
         findArtistByName(unqfy, argv.name);
     }
