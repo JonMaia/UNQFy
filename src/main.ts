@@ -1,6 +1,7 @@
 import fs from 'fs'; // necesitado para guardar/cargar unqfy
 import {argv} from './commands_unqfy';
 import {UNQfy} from './unqfy'; // importamos el modulo unqfy
+import {UNQfyTerminal} from './unqfy_terminal';
 
 // Retorna una instancia de UNQfy. Si existe filename, recupera la instancia desde el archivo.
 function getUNQfy(filename = 'data.json') {
@@ -45,124 +46,10 @@ function saveUNQfy(unqfy: UNQfy, filename = 'data.json') {
 
 */
 
-function addArtist(unqfy: UNQfy, argv: any) {
-    let name = argv.name;
-    let country = argv.country;
-    try{
-        let artist = unqfy.addArtist({name, country});
-        console.log(artist);
-    } catch(e) {
-        console.log(`Error: ${e.message}`);
-    }
-}
-function addAlbum(unqfy: UNQfy, argv: any) {
-    
-    let artist = argv.artist;
-    let name = argv.name;
-    let year = argv.year;
-    try{
-        let album = unqfy.addAlbum({artist ,name ,year});
-        console.log(album);
-    } catch(e) {
-        console.log(`Error: ${e.message}`);
-    }
-}
-
-function deleteArtist(unqfy: UNQfy, argv: any) {
-    let id = Number(argv.id);
-    if(isNaN(id)) {
-        console.log(`El id '${argv.id}' no es valido. Debe ingresar un número.`);
-        return;
-    }
-    unqfy.deleteArtist(id);
-    console.log(`El artista '${id}' fue borrado.`);
-}
-
-function getArtist(unqfy: UNQfy, argv: any) {
-    let id = Number(argv.id);
-    if(isNaN(id)) {
-        console.log(`El id '${argv.id}' no es valido. Debe ingresar un número.`);
-        return;
-    }
-    if(id !== -1) {
-        findArtistById(unqfy, id);
-    } else {
-        findArtistByName(unqfy, argv.name);
-    }
-}
-
-function findArtistById(unqfy: UNQfy, id: number) {
-    let artist = unqfy.getArtistById(id);
-    if(artist !== undefined) {
-        console.log(artist);
-    } else {
-        console.log(`No se encontro artista con id: ${id}`);
-    }
-}
-
-function findArtistByName(unqfy: UNQfy, name: string) {
-    let artists = unqfy.filterArtistsByName(name);
-    if(artists.length > 0) {
-        console.log(artists);
-    } else {
-        console.log(`No se encontraron artistas que matcheen con '${name}'`);
-    }
-}
-    
-function getAlbum(unqfy: UNQfy, argv: any) {
-    let album = unqfy.getAlbumByNamePartial(argv.name);
-    if(album.length > 0) {
-        console.log(album);
-    } else {
-        console.log('No se encontro el Album');
-    }
-
-}
-
-
-
-function deleteAlbum(unqfy: UNQfy, argv: any) {
-    let name = argv.name;
-    unqfy.deleteAlbum(name);
-    console.log(`El album '${name}' fue borrado.`);
-}
-
-
-
 function main() {
     let unqfy = getUNQfy();
     let command = argv._[0];
-
-    switch(command) {
-        case 'addArtist': 
-            addArtist(unqfy, argv);
-            break;
-
-        case 'deleteArtist':
-            deleteArtist(unqfy, argv);
-            break;
-        
-        case 'getArtist':
-            getArtist(unqfy, argv);
-            break;
-
-        case 'getAlbum':
-            getAlbum(unqfy, argv);
-        break;     
-        
-        case 'addAlbum': 
-            addAlbum(unqfy, argv);
-            break; 
-
-        case 'deleteAlbum':
-            deleteAlbum(unqfy, argv);
-            break;
-        
-        default:
-            console.log('Operación desconocida.');
-            console.log('--help     para ver los comandos')
-    }
-
+    UNQfyTerminal.executeCommand(command, unqfy, argv);
     saveUNQfy(unqfy);
 }
 
