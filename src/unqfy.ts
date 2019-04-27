@@ -3,18 +3,22 @@ import fs from 'fs'; // para cargar/guarfar unqfy
 import {Artist} from './model/artist';
 import {ArtistInterface, AlbumInterface} from './model/interfaces';
 import { Album } from './model/album';
-
-
+import { Track } from './model/track';
+import {TrackInterface} from './model/interfaces';
 
 // COMPLETAR POR EL ALUMNO: exportar todas las clases que necesiten ser utilizadas desde un modulo cliente
 export class UNQfy {
     private listeners: any;
     private artists: Array<Artist>;
     private albumes: Array<Album>;
+    private tracks: Array<Track>;
+    private trackID: number = 0;
 
     constructor() {
         this.artists = new Array;
         this.albumes = new Array;
+        this.tracks = new Array;
+        this.tracks = new Array;
     }
 
     /**
@@ -134,13 +138,23 @@ export class UNQfy {
     //   trackData.duration (number)
     //   trackData.genres (lista de strings)
     // retorna: el nuevo track creado
-    public addTrack(albumId: string, trackData: any) {
+    public addTrack(albumId: number, trackData: TrackInterface) {
     /* Crea un track y lo agrega al album con id albumId.
     El objeto track creado debe tener (al menos):
         - una propiedad name (string),
         - una propiedad duration (number),
-        - una propiedad genres (lista de strings)
-    */
+        - una propiedad genres (lista de strings)*/
+        let newTrack = new Track(trackData.name, trackData.duration, trackData.genres);
+        newTrack.id = this.getNextTrackId();
+        this.tracks.push(newTrack);
+        //albumId.addTrack(newTrack);
+        return newTrack;
+    }
+
+    public getNextTrackId() : number {
+        let trackID = this.trackID;
+        this.trackID ++;
+        return trackID;
     }
 
     public getArtistById(id: number): Artist | undefined {
@@ -151,8 +165,8 @@ export class UNQfy {
 
     }
 
-    public getTrackById(id: number) {
-
+    public getTrackById(id: number): Track | undefined {
+        return this.tracks.find(track => track.id === id);
     }
 
     public getPlaylistById(id: number) {
@@ -161,8 +175,12 @@ export class UNQfy {
 
     // genres: array de generos(strings)
     // retorna: los tracks que contenga alguno de los generos en el parametro genres
-    public getTracksMatchingGenres(genres: any) {
-
+    public getTracksMatchingGenres(genres: Array<string>): Array<Track> | undefined {
+        return this.tracks.filter((track) => {    
+            if(track.containsGenre(genres)) {
+                return track;
+            }
+        })
     }
 
     // artistName: nombre de artista(string)
@@ -203,7 +221,7 @@ export class UNQfy {
     public static load(filename: string) {
         const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
         //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
-        const classes = [UNQfy, Artist, Album];
+        const classes = [UNQfy, Artist, Album, Track];
         return picklify.unpicklify(JSON.parse(serializedData), classes);
     }
 }
