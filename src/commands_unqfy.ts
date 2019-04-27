@@ -15,13 +15,13 @@ export const {argv} = require('yargs')
                 .example("$0 addArtist --name 'test' --country 'ARG'")
                 .command('deleteArtist', 
                     'Elimina un artista junto a sus albumes y tracks. Los tracks también son eliminados de los playlist', {
-                    name: {
+                    id: {
                         demand: true,
-                        alias: 'n',
-                        desc: 'Nombre del artista'
+                        alias: 'i',
+                        desc: 'Id del artista'
                     }
                 })
-                .example("$0 deleteArtist --name 'test'")
+                .example("$0 deleteArtist --id 10 ")
                 .command('getArtist', 'Busca y devuelve los artistas que coincidan con el id o nombre pasado. Permite búsqueda parcial ', {
                     name: {
                         demand: false,

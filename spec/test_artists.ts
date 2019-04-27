@@ -29,15 +29,11 @@ describe('Test administrador de artistas', () => {
 
 
     it('Un artista debe poder ser eliminado por su nombre', () => {
-        createArtist(unqfy, 'El Kuelgue', 'Argentina');
+        let artist = createArtist(unqfy, 'El Kuelgue', 'Argentina');
 
-        unqfy.deleteArtist('El Kuelgue');
+        unqfy.deleteArtist(artist.id);
 
         assert.isFalse(unqfy.existsArtist('El Kuelgue'));
     });
 
-
-    it('Cuando se intenta eliminar un artista que no existe, debe lanzarse un error', () => {
-        assert.throws(() => {unqfy.deleteArtist('Inexistente');}, Error, "El artista 'Inexistente' no existe");
-    })
 });

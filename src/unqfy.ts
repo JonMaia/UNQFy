@@ -23,9 +23,7 @@ export class UNQfy {
      * @param artistData - Debe tener mínimamente: name(string), country(string)
      */
     public addArtist(artistData: ArtistInterface): Artist {
-        let artist = this.findArtistByName(artistData.name);
-        
-        if(artist === undefined) {
+        if(!this.existsArtist(artistData.name)) {
             let newArtist = new Artist(artistData.name, artistData.country);
             this.artists.push(newArtist);
             return newArtist;
@@ -34,21 +32,36 @@ export class UNQfy {
         }
     }
 
-    public deleteArtist(name: string) {
-        let artist = this.findArtistByName(name);
+    /**
+     * Busca y elimina el artista con el id pasado por parametro
+     * @param id 
+     */
+    public deleteArtist(id: number): void {
+        let artist = this.getArtistById(id);
         if(artist !== undefined) {
-            this.artists.splice(this.artists.indexOf(artist), 1)
+            this.artists.splice(this.artists.indexOf(artist), 1);
         }
     }
 
+    /**
+     * Retorna true si existe un artista con el nombre pasado por parametro
+     * @param name 
+     */
     public existsArtist(name: string): boolean {
         return this.artists.some(artist => artist.name === name);
     }
 
-    public getArtistsByNamePartial(name: string): Array<Artist> {
+    /**
+     * Retorna una lista de artistas que coincidan, incluso parcialmente, con el nombre pasado por parametro
+     * @param name 
+     */
+    public filterArtistsByName(name: string): Array<Artist> {
         return this.artists.filter(artist => artist.name.includes(name));
     }
 
+    /**
+     * @deprecated
+     */
     private findArtistByName(name: string): Artist | undefined {
         return this.artists.find(artist => artist.name === name);
     }

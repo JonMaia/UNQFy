@@ -69,13 +69,17 @@ function addAlbum(unqfy: UNQfy, argv: any) {
 }
 
 function deleteArtist(unqfy: UNQfy, argv: any) {
-    let name = argv.name;
-    unqfy.deleteArtist(name);
-    console.log(`El artista '${name}' fue borrado.`);
+    let id = Number(argv.id);
+    if(isNaN(id)) {
+        console.log(`El id '${argv.id}' no es valido. Debe ingresar un número.`);
+        return;
+    }
+    unqfy.deleteArtist(id);
+    console.log(`El artista '${id}' fue borrado.`);
 }
 
 function getArtist(unqfy: UNQfy, argv: any) {
-    let id = parseInt(argv.id);
+    let id = Number(argv.id);
     if(isNaN(id)) {
         console.log(`El id '${argv.id}' no es valido. Debe ingresar un número.`);
         return;
@@ -97,7 +101,7 @@ function findArtistById(unqfy: UNQfy, id: number) {
 }
 
 function findArtistByName(unqfy: UNQfy, name: string) {
-    let artists = unqfy.getArtistsByNamePartial(name);
+    let artists = unqfy.filterArtistsByName(name);
     if(artists.length > 0) {
         console.log(artists);
     } else {
