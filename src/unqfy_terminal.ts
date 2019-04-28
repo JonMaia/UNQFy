@@ -63,10 +63,14 @@ export class UNQfyTerminal {
             console.log(`El id '${argv.id}' no es valido. Debe ingresar un número.`);
             return;
         }
-        unqfy.deleteArtist(id);
-        console.log(`El artista '${id}' fue borrado.`);
+        try {
+            unqfy.deleteArtist(id);
+            console.log(`El artista '${id}' fue borrado.`);
+        } catch(e) {
+            console.log(`Error: ${e.message}`);
+        }
     }
-    
+
     private static getArtist(unqfy: UNQfy, argv: any) {
         let id = parseInt(argv.id);
         if(isNaN(id)) {

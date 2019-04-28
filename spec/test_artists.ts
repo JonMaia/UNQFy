@@ -36,4 +36,7 @@ describe('Test administrador de artistas', () => {
         assert.isFalse(unqfy.existsArtist('El Kuelgue'));
     });
 
+    it('Borrar un artista con un id inexistente, debe lanzar una excepción', () => {
+        assert.throws(() => { unqfy.deleteArtist(100) }, Error, "No existe un artista con id '100'")
+    });
 });

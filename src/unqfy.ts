@@ -45,6 +45,8 @@ export class UNQfy {
         let artist = this.getArtistById(id);
         if(artist !== undefined) {
             this.artists.splice(this.artists.indexOf(artist), 1);
+        } else {
+            throw new Error(`No existe un artista con id '${id}'`);
         }
     }
 
