@@ -74,12 +74,11 @@ export const {argv} = require('yargs')
                 .example("$0 addAlbum --artist 1 --name 'test' --year '2019'")
                 .command('deleteAlbum', 
                 'Elimina un album junto a sus tracks. Los tracks también son eliminados de los playlist', {
-                id: {
-                    demand: true,
-                    alias: 'i',
-                    desc: 'id del album'
-                }
+                    id: {
+                        demand: true,
+                        alias: 'i',
+                        desc: 'id del album'
+                    }
                 })
-
-            .example("$0 deleteAlbum --id 29")
+                .example("$0 deleteAlbum --id 29")
                 .help();

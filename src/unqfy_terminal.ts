@@ -125,7 +125,7 @@ export class UNQfyTerminal {
         if(artists.length > 0) {
             console.log(artists);
         } else {
-            console.log(`No se encontraron artistas que matcheen con '${name}'`);
+            console.log(`No se encontraron albumes que matcheen con '${name}'`);
         }
     }
 
@@ -138,6 +138,7 @@ export class UNQfyTerminal {
         }
         try{
             unqfy.deleteAlbum(id);
+            console.log(`El album '${id}' fue borrado`);
         } catch(e) {
             console.log(`${e.message}`);
         }
