@@ -4,9 +4,9 @@ export interface ArtistInterface {
 }
 
 export interface AlbumInterface {
-    artist: string;
+    artistId: number;
     name: string;
-    year: Number;
+    year: number;
 }
 
 export interface TrackInterface {

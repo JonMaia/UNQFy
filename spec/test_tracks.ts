@@ -4,7 +4,7 @@ import { Track } from '../src/model/track';
 
 function createTrack(unqfy: UNQfy, name: string, duration: number, genres: Array<string>) {
     // TODO: cambiar string del album por el objeto
-    return unqfy.addTrack('The Book of Souls', {name, duration, genres, });
+    return unqfy.addTrack(1, {name, duration, genres, });
 }
 
 describe('Test administrador de tracks', () => {

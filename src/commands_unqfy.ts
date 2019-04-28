@@ -43,14 +43,20 @@ export const {argv} = require('yargs')
                         alias: 'n',
                         desc: 'Nombre parcial o completo del album',
                         default: ''
+                    },
+                    id: {
+                        demand: false,
+                        alias: 'i',
+                        desc: 'Id del album',
+                        default: '-1'
                     }
                 })
                 .example("$0 getAlbum")
                 .command('addAlbum', 'Crea un nuevo Album', {
-                    artist: {
+                    artistId: {
                         demand: true,
                         alias: 'a',
-                        desc: 'Nombre del artista'
+                        desc: 'id del artista'
                     },
                 
                     name: {
@@ -65,15 +71,15 @@ export const {argv} = require('yargs')
                     }
                 })
                 .example("$0 addAlbum --help")
-                .example("$0 addAlbum --artist 'test' --name 'test' --year '2019'")
+                .example("$0 addAlbum --artist 1 --name 'test' --year '2019'")
                 .command('deleteAlbum', 
-                'Elimina un artista junto a sus albumes y tracks. Los tracks también son eliminados de los playlist', {
-                name: {
+                'Elimina un album junto a sus tracks. Los tracks también son eliminados de los playlist', {
+                id: {
                     demand: true,
-                    alias: 'n',
-                    desc: 'Nombre del artista'
+                    alias: 'i',
+                    desc: 'id del album'
                 }
                 })
 
-            .example("$0 deleteArtist --name 'test'")
+            .example("$0 deleteAlbum --id 29")
                 .help();

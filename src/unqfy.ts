@@ -13,6 +13,7 @@ export class UNQfy {
     private albumes: Array<Album>;
     private tracks: Array<Track>;
     private trackID: number = 0;
+    private albumID: number = 0;
 
     constructor() {
         this.artists = new Array;
@@ -70,6 +71,11 @@ export class UNQfy {
         return this.artists.find(artist => artist.name === name);
     }
 
+    private findArtistById(id: number): Artist | undefined {
+        return this.artists.find(artist => artist.id === id);
+    }
+
+
     // albumData: objeto JS con los datos necesarios para crear un album
     //   albumData.name (string)
     //   albumData.year (number)
@@ -79,14 +85,14 @@ export class UNQfy {
         return this.albumes.filter(album => album.name.includes(name));
     }
 
-
+/*
     public addAlbumIdArtist (artistId: number, albumData:AlbumInterface): Album {
 
         return this.addAlbum({artist: 'dd', name: albumData.name, year: albumData.year})
        
         
     }
-
+*/
     public addAlbum(albumData: AlbumInterface): Album {  
 
         /* Crea un album y lo agrega al artista con id artistId.
@@ -94,29 +100,47 @@ export class UNQfy {
             - una propiedad name (string)
             - una propiedad year (number)
         */
-            let album = this.findAlbumByName(albumData.name);
-            let artistDate = this.findArtistByName(albumData.artist)
+          
+            let artistDate = this.findArtistById(albumData.artistId);
+
+            let album = this.getAlbumByNamePartial(albumData.name)
+                                .filter(alb => alb.artist.id === albumData.artistId);
+
 
             if(artistDate !== undefined){
-                 if(album == undefined) {
+
+                if(album.length  == 0) {
                       let newAlbum = new Album(artistDate, albumData.name, albumData.year);
+                      newAlbum.setId(this.getNextTrackId());
                       this.albumes.push(newAlbum);
                       return newAlbum;
                  } else {
-                     throw new Error(`Ya existe el album '${albumData.name}'`);
+                     throw new Error(`El album '${albumData.name}' del artista '${artistDate.name}' ya a sido creado`);
                  }
                 } else{
-                    throw new Error(`El Artista '${albumData.name}' no existe debe crearlo`);
+                    throw new Error(`No existe artista con el Id: '${albumData.artistId}'`);
                 }
         }
-    
-        public deleteAlbum(name: string) {
-            let album = this.findAlbumByName(name);
-            if(album !== undefined) {
-                this.albumes.splice(this.albumes.indexOf(album), 1)
-            }
+
+        public getNextAlbumId() : number {
+            let idNewAlbum = this.albumID;
+            this.albumID ++;
+            return idNewAlbum;
         }
-        
+    
+        public deleteAlbum(id: number): void {
+            let album = this.getAlbumById(id);
+            if(album !== undefined) {
+                //let tracksAlbumes = album.tracks;
+                //tracksAlbumes.find(track => this.deleteTrack(track.id));
+                
+                this.albumes.splice(this.albumes.indexOf(album),1);
+                throw new Error(`El album ${album.name} fue borrado`);
+                 }else{
+                    throw new Error(`El album con el id:${id} no existe`);
+                }
+        }
+
         private findAlbumByName(name: string): Album | undefined {
             return this.albumes.find(album => album.name === name);
         }
@@ -128,9 +152,7 @@ export class UNQfy {
                   return artist.name;
              }else{
             throw new Error(`El Artista con el id: '${id}' no existe`);
-            
         }
-        
     }
 
     // trackData: objeto JS con los datos necesarios para crear un track
@@ -157,12 +179,16 @@ export class UNQfy {
         return trackID;
     }
 
+    public filterAlbumByName(name: string): Array<Album> {
+        return this.albumes.filter(album => album.name.includes(name));
+    }
+
     public getArtistById(id: number): Artist | undefined {
         return this.artists.find(artist => artist.id === id);
     }
 
-    public getAlbumById(id: number) {
-
+    public getAlbumById(id: number): Album | undefined {
+        return this.albumes.find(album => album.id === id);
     }
 
     public getTrackById(id: number): Track | undefined {

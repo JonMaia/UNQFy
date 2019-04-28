@@ -46,11 +46,11 @@ export class UNQfyTerminal {
     }
 
     private static addAlbum(unqfy: UNQfy, argv: any) {
-        let artist = argv.artist;
+        let artistId = argv.artistId;
         let name = argv.name;
         let year = argv.year;
         try{
-            let album = unqfy.addAlbum({artist ,name ,year});
+            let album = unqfy.addAlbum({artistId ,name ,year});
             console.log(album);
         } catch(e) {
             console.log(`Error: ${e.message}`);
@@ -99,18 +99,47 @@ export class UNQfyTerminal {
     }
         
     private static getAlbum(unqfy: UNQfy, argv: any) {
-        let album = unqfy.getAlbumByNamePartial(argv.name);
-        if(album.length > 0) {
+        let id = parseInt(argv.id);
+        if(isNaN(id)) {
+            console.log(`El id '${argv.id}' no es valido. Debe ingresar un número.`);
+            return;
+        }
+        if(id !== -1) {
+            this.findAlbumById(unqfy, id);
+        } else {
+            this.findAlbumByName(unqfy, argv.name);
+        }
+    }
+
+    private static findAlbumById(unqfy: UNQfy, id: number) {
+        let album = unqfy.getAlbumById(id);
+        if(album !== undefined) {
             console.log(album);
         } else {
-            console.log('No se encontro el Album');
+            console.log(`No se encontro artista con id: ${id}`);
         }
-    
     }
     
+    private static findAlbumByName(unqfy: UNQfy, name: string) {
+        let artists = unqfy.filterAlbumByName(name);
+        if(artists.length > 0) {
+            console.log(artists);
+        } else {
+            console.log(`No se encontraron artistas que matcheen con '${name}'`);
+        }
+    }
+
+    
     private static deleteAlbum(unqfy: UNQfy, argv: any) {
-        let name = argv.name;
-        unqfy.deleteAlbum(name);
-        console.log(`El album '${name}' fue borrado.`);
+        let id = Number(argv.id);
+        if(isNaN(id)) {
+            console.log(`El id '${argv.id}' no es valido. Debe ingresar un número.`);
+            return;
+        }
+        try{
+            unqfy.deleteAlbum(id);
+        } catch(e) {
+            console.log(`${e.message}`);
+        }
     }
 }

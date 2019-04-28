@@ -59,24 +59,13 @@ function addTrack(unqfy: UNQfy, argv: any) {
     let genres = argv.genres;
     try{
         // TODO: Cambiar String Album por el objeto
-        let track = unqfy.addTrack("The Book of Souls",{name, duration, genres});
+        let track = unqfy.addTrack(1,{name, duration, genres});
         console.log(`El '${track}' ha sido añadido`);
     } catch(e) {
         console.log(`Error: ${e.message}`);
     }
-}
 
-function addTrack(unqfy: UNQfy, argv: any) {
-    let name = argv.name;
-    let duration = argv.duration;
-    let genres = argv.genres;
-    try{
-        // TODO: Cambiar String Album por el objeto
-        let track = unqfy.addTrack("The Book of Souls",{name, duration, genres});
-        console.log(`El '${track}' ha sido añadido`);
-    } catch(e) {
-        console.log(`Error: ${e.message}`);
-    }
+
 }
 
 main();

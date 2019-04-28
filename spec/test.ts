@@ -8,13 +8,12 @@ function createAndAddArtist(unqfy: UNQfy, artistName: any, country: any) {
 }
 
 function createAndAddAlbum(unqfy: UNQfy, artistId: number, albumName: string, albumYear: number) {
- 
-   let artistName = unqfy.searchNameArtistById(artistId)
- 
-  return unqfy.addAlbum({artist:artistName, name: albumName, year: albumYear });
+
+      return unqfy.addAlbum({artistId, name: albumName, year: albumYear });
+      
 }
 
-function createAndAddTrack(unqfy: UNQfy, albumName: string, trackName: string, trackDuraction: any, trackGenres: any) {
+function createAndAddTrack(unqfy: UNQfy, albumName: number, trackName: string, trackDuraction: any, trackGenres: any) {
   return unqfy.addTrack(albumName, { name: trackName, duration: trackDuraction, genres: trackGenres });
 }
 
