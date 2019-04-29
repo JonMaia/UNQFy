@@ -2,6 +2,7 @@ import fs from 'fs'; // necesitado para guardar/cargar unqfy
 import {argv} from './commands_unqfy';
 import {UNQfy} from './unqfy'; // importamos el modulo unqfy
 import {UNQfyTerminal} from './unqfy_terminal';
+import { Album } from './model/album';
 
 // Retorna una instancia de UNQfy. Si existe filename, recupera la instancia desde el archivo.
 function getUNQfy(filename = 'data.json') {

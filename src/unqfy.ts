@@ -8,6 +8,7 @@ import {TrackInterface} from './model/interfaces';
 
 // COMPLETAR POR EL ALUMNO: exportar todas las clases que necesiten ser utilizadas desde un modulo cliente
 export class UNQfy {
+    
     private listeners: any;
     private artists: Array<Artist>;
     private albumes: Array<Album>;
@@ -153,17 +154,40 @@ export class UNQfy {
         - una propiedad name (string),
         - una propiedad duration (number),
         - una propiedad genres (lista de strings)*/
+        let track = this.getTrackByName(trackData.name);
         let newTrack = new Track(trackData.name, trackData.duration, trackData.genres);
         newTrack.id = this.getNextTrackId();
-        this.tracks.push(newTrack);
-        //albumId.addTrack(newTrack);
+        let album = this.getAlbumById(albumId);
+        if (album !== undefined) {
+            if(track === undefined){
+                album.tracks.push(newTrack); // Agregar solo a album o a tracks?
+                this.tracks.push(newTrack);
+            } else {
+                throw new Error(`El track '${track.name}' ya se encuentra en el album`);
+            }    
+        } else {
+            throw new Error(`El album no existe, deberia crearlo`);
+        }
+        
         return newTrack;
     }
 
+    public deleteTrack(trackId: number) {
+        let track = this.getTrackById(trackId);
+        if(track !== undefined) {
+            this.tracks.splice(this.tracks.indexOf(track), 1);
+            // eliminar del playlist
+        }
+    }
+
+    public getTrackByName(name: string) {
+        return this.tracks.find(track => track.name === name);
+    }
+
     public getNextTrackId() : number {
-        let trackID = this.trackID;
+        let trackId = this.trackID;
         this.trackID ++;
-        return trackID;
+        return trackId;
     }
 
     public filterAlbumByName(name: string): Array<Album> {
@@ -198,8 +222,12 @@ export class UNQfy {
 
     // artistName: nombre de artista(string)
     // retorna: los tracks interpredatos por el artista con nombre artistName
-    public getTracksMatchingArtist(artistName: any) {
-
+    public getTracksMatchingArtist(artistName: string) {
+        return this.albumes.filter((album) => {
+            if(album.artist.name === artistName){
+                return album.tracks;
+            }
+        })
     }
 
 

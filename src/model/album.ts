@@ -1,10 +1,11 @@
 import { Artist } from "./artist";
+import { Track } from "./track";
 
 export class Album {
 
     public id: number = 0;
     public artist: Artist;
-    public tracks: Array<String>;
+    public tracks: Array<Track>;
     public name: string;
     public year: number;
 

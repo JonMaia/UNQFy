@@ -1,10 +1,16 @@
 import {assert} from 'chai';
 import {UNQfy} from '../src/unqfy';
 import { Track } from '../src/model/track';
+import { Album } from '../src/model/album';
 
-function createTrack(unqfy: UNQfy, name: string, duration: number, genres: Array<string>) {
-    // TODO: cambiar string del album por el objeto
-    return unqfy.addTrack(1, {name, duration, genres, });
+function createTrack(unqfy: UNQfy,album: number, name: string, duration: number, genres: Array<string>) {
+
+    return unqfy.addTrack(album, {name, duration, genres});
+}
+
+function createAndAddAlbum(unqfy: UNQfy, artistId: number, albumName: string, albumYear: number) {
+
+    return unqfy.addAlbum({artistId, name: albumName, year: albumYear });   
 }
 
 describe('Test administrador de tracks', () => {
@@ -12,11 +18,13 @@ describe('Test administrador de tracks', () => {
     let unqfy: UNQfy;
     let genres: Array<string>;
     let track: Track;
+    let album: Album;
 
     beforeEach(() => {
         unqfy = new UNQfy();
         genres = ['Rock', 'Metal']
-        track = createTrack(unqfy, 'If Eternity Should Fail', 8, genres);
+        album = createAndAddAlbum(unqfy, 123, 'The Book of Souls', 2015);
+        track = createTrack(unqfy, album.id, 'If Eternity Should Fail', 8, genres);
     })
 
     it('Creación de track', () => {

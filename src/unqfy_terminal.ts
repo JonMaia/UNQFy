@@ -28,6 +28,18 @@ export class UNQfyTerminal {
                 this.deleteAlbum(unqfy, argv);
                 break;
             
+            case 'addTrack':
+                this.addTrack(unqfy, argv);
+                break;    
+
+            case 'deleteTrack':
+                this.deleteTrack(unqfy, argv);
+                break;
+
+            case 'getTrack':
+                this.getTrack(unqfy, argv);
+                break;
+
             default:
                 console.log('Operación desconocida.');
                 console.log('--help     para ver los comandos')
@@ -52,6 +64,19 @@ export class UNQfyTerminal {
         try{
             let album = unqfy.addAlbum({artistId ,name ,year});
             console.log(album);
+        } catch(e) {
+            console.log(`Error: ${e.message}`);
+        }
+    }
+
+    private static addTrack(unqfy: UNQfy, argv: any) {
+        let name = argv.name;
+        let duration = argv.duration;
+        let genres = argv.genres;
+        let album = argv.album;
+        try{
+            let track = unqfy.addTrack(album.id,{name, duration, genres});
+            console.log(`El '${track}' ha sido añadido`);
         } catch(e) {
             console.log(`Error: ${e.message}`);
         }
@@ -145,6 +170,29 @@ export class UNQfyTerminal {
             console.log(`El album '${id}' fue borrado`);
         } catch(e) {
             console.log(`${e.message}`);
+        }
+    }
+
+    private static deleteTrack(unqfy: UNQfy, argv: any) {
+        let track = argv.id;
+        if(isNaN(argv.id)) {
+            console.log(`El id '${argv.id}' no es valido. Debe ingresar un número.`);
+            return;
+        }
+        unqfy.deleteTrack(track);
+        console.log(`El track '${track.name}' fue borrado`);
+    }
+
+    private static getTrack(unqfy: UNQfy, argv: any) {
+        let track = argv.id;
+        if(isNaN(track)) {
+            console.log(`El id '${argv.id}' no es valido. Debe ingresar un número.`);
+            return;
+        }
+        if(track === undefined) {
+            console.log('No se encontro el id de track')
+        } else {
+            unqfy.getTrackById(track);  
         }
     }
 }
