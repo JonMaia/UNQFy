@@ -73,10 +73,10 @@ export class UNQfyTerminal {
         let name = argv.name;
         let duration = argv.duration;
         let genres = argv.genres;
-        let album = argv.album;
+        let idAlbum = argv.idAlbum;
         try{
-            let track = unqfy.addTrack(album.id,{name, duration, genres});
-            console.log(`El '${track}' ha sido añadido`);
+            let track = unqfy.addTrack(idAlbum, {name, duration, genres});
+            console.log(track);
         } catch(e) {
             console.log(`Error: ${e.message}`);
         }
@@ -174,25 +174,47 @@ export class UNQfyTerminal {
     }
 
     private static deleteTrack(unqfy: UNQfy, argv: any) {
-        let track = argv.id;
-        if(isNaN(argv.id)) {
+        let trackId = argv.id;
+        if(isNaN(trackId)) {
             console.log(`El id '${argv.id}' no es valido. Debe ingresar un número.`);
             return;
         }
-        unqfy.deleteTrack(track);
-        console.log(`El track '${track.name}' fue borrado`);
+        try {
+            unqfy.deleteTrack(trackId);
+            console.log(`El track '${trackId}' fue borrado`);
+        } catch(e) {
+            console.log(`Error: ${e.message}`);
+        }
     }
 
     private static getTrack(unqfy: UNQfy, argv: any) {
-        let track = argv.id;
-        if(isNaN(track)) {
+        let trackId = Number(argv.id);
+        if(isNaN(trackId)) {
             console.log(`El id '${argv.id}' no es valido. Debe ingresar un número.`);
             return;
         }
-        if(track === undefined) {
-            console.log('No se encontro el id de track')
+        if(trackId !== -1) {
+            this.getTrackById(unqfy, trackId);
         } else {
-            unqfy.getTrackById(track);  
+            this.findTrackByName(unqfy, argv.name);
+        }
+    }
+
+    private static getTrackById(unqfy:UNQfy, trackId: number) {
+        let track = unqfy.getTrackById(trackId);
+        if(track === undefined) {
+            console.log('No se encontro el id de track');
+        } else {
+            console.log(track);
+        }
+    }
+
+    private static findTrackByName(unqfy: UNQfy, name: string) {
+        let tracks = unqfy.getTrackByNamePartial(name);
+        if(tracks.length === 0) {
+            console.log(`No se encontraron tracks que correspondan con '${name}'`);
+        } else {
+            console.log(tracks);
         }
     }
 }

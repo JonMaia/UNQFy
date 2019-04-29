@@ -177,11 +177,17 @@ export class UNQfy {
         if(track !== undefined) {
             this.tracks.splice(this.tracks.indexOf(track), 1);
             // eliminar del playlist
+        } else {
+            throw new Error(`El track con el id '${trackId}' no existe`);
         }
     }
 
     public getTrackByName(name: string) {
         return this.tracks.find(track => track.name === name);
+    }
+
+    public getTrackByNamePartial(name: string): Array<Track> {
+        return this.tracks.filter(track => track.name.includes(name));
     }
 
     public getNextTrackId() : number {
