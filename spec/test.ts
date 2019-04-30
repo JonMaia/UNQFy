@@ -1,5 +1,8 @@
-const assert = require('chai').assert;
+import {assert} from 'chai';
 import {UNQfy} from '../src/unqfy';
+import { Artist } from '../src/model/artist';
+import { Album } from '../src/model/album';
+import { Track } from '../src/model/track';
 
 
 function createAndAddArtist(unqfy: UNQfy, artistName: any, country: any) {
@@ -92,21 +95,21 @@ describe('Add, remove and filter data', () => {
   });
 
   it('should get all tracks matching artist', () => {
-    const artist: any = createAndAddArtist(unqfy, 'Guns n\' Roses', 'USA');
-    const album: any = createAndAddAlbum(unqfy, artist.id, 'Appetite for Destruction', 1987);
-    const t1 = createAndAddTrack(unqfy, album.id, 'Welcome to the jungle', 200, ['rock', 'hard rock']);
-    const t2 = createAndAddTrack(unqfy, album.id, 'It\'s so easy', 200, ['rock', 'hard rock']);
+    const artist: Artist = createAndAddArtist(unqfy, 'Guns n\' Roses', 'USA');
+    const album: Album = createAndAddAlbum(unqfy, artist.id, 'Appetite for Destruction', 1987);
+    const t1: Track = createAndAddTrack(unqfy, album.id, 'Welcome to the jungle', 200, ['rock', 'hard rock']);
+    const t2: Track = createAndAddTrack(unqfy, album.id, 'It\'s so easy', 200, ['rock', 'hard rock']);
 
-    const album2: any = createAndAddAlbum(unqfy, artist.id, 'Use Your Illusion I', 1992);
-    const t3 = createAndAddTrack(unqfy, album2.id, 'Don\'t Cry', 500, ['rock', 'hard rock']);
+    const album2: Album = createAndAddAlbum(unqfy, artist.id, 'Use Your Illusion I', 1992);
+    const t3: Track = createAndAddTrack(unqfy, album2.id, 'Don\'t Cry', 500, ['rock', 'hard rock']);
 
-    const artist2: any = createAndAddArtist(unqfy, 'Michael Jackson', 'USA');
-    const album3: any = createAndAddAlbum(unqfy, artist2.id, 'Thriller', 1987);
+    const artist2: Artist = createAndAddArtist(unqfy, 'Michael Jackson', 'USA');
+    const album3: Album = createAndAddAlbum(unqfy, artist2.id, 'Thriller', 1987);
     createAndAddTrack(unqfy, album3.id, 'Thriller', 200, ['pop', 'movie']);
     createAndAddTrack(unqfy, album3.id, 'Another song', 500, ['classic']);
     createAndAddTrack(unqfy, album3.id, 'Another song II', 500, ['movie']);
 
-    const matchingTracks: any = unqfy.getTracksMatchingArtist(artist.idArtist);
+    const matchingTracks: Array<Track> = unqfy.getTracksMatchingArtist(artist.id);
 
     assert.isArray(matchingTracks);
     assert.lengthOf(matchingTracks, 3);

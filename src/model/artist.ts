@@ -7,6 +7,6 @@ export class Artist {
     constructor(name: string, country: string) {
         this.name = name;
         this.country = country;
-        this.id = Math.floor(Math.random() * 1000);
+        this.id = 0;
     }
 }

@@ -123,7 +123,7 @@ export class UNQfyTerminal {
         if(artists.length > 0) {
             console.log(artists);
         } else {
-            console.log(`No se encontraron artistas que matcheen con '${name}'`);
+            console.log(`No se encontraron artistas que correspondan con '${name}'`);
         }
     }
         

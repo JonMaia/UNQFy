@@ -14,6 +14,7 @@ export class UNQfy {
     private artists: Array<Artist>;
     private albumes: Array<Album>;
     private tracks: Array<Track>;
+    private artistId: number = 0;
     private trackID: number = 0;
     private albumID: number = 0;
     private playLists: Array<Playlist>;
@@ -34,11 +35,21 @@ export class UNQfy {
     public addArtist(artistData: ArtistInterface): Artist {
         if(!this.existsArtist(artistData.name)) {
             let newArtist = new Artist(artistData.name, artistData.country);
+            newArtist.id = this.nextArtistId();
             this.artists.push(newArtist);
             return newArtist;
         } else {
             throw new Error(`Ya existe el artista '${artistData.name}'`);
         }
+    }
+
+    /**
+     * @returns el siguiente id a asignar del artista
+     */
+    private nextArtistId(): number {
+        let id = this.artistId;
+        this.artistId++;
+        return id;
     }
 
     /**
@@ -228,14 +239,22 @@ export class UNQfy {
         })
     }
 
-    // artistName: nombre de artista(string)
-    // retorna: los tracks interpredatos por el artista con nombre artistName
-    public getTracksMatchingArtist(idArtist: number) {
-        return this.albumes.filter((album) => {
-            if(album.idArtist === idArtist){
-                return album.tracks;
-            }
-        })
+    /**
+     * @returns los tracks interpretados por el artista con el id pasado por parametro
+     * @param idArtist 
+     */
+    public getTracksMatchingArtist(idArtist: number): Array<Track> {
+        let albums = this.filterAlbumsByArtistId(idArtist);
+        if(albums !== undefined) {
+            return albums.reduce((listTracks: Array<Track>, album: Album) => {
+                return listTracks.concat(album.tracks);
+            }, []);
+        }
+        return new Array;
+    }
+
+    private filterAlbumsByArtistId(idArtist: number): Array<Album> | undefined {
+        return this.albumes.filter(album => album.idArtist === idArtist);
     }
 
 
@@ -290,8 +309,19 @@ export class UNQfy {
         }
     }
 
+    /**
+     * @returns todos los artistas, albumes, tracks y playlist que coincidan con el nombre pasado por parametro
+     * @param name 
+     */
     public searchByName(name: string) {
-        
+        let artists = this.filterArtistsByName(name);
+        let albums = this.filterAlbumByName(name);
+        let tracks = this.getTrackByNamePartial(name);
+        return {
+            artists,
+            albums,
+            tracks
+        }
     }
 
     public save(filename: string) {
