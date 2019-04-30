@@ -4,13 +4,13 @@ import { Track } from "./track";
 export class Album {
 
     public id: number = 0;
-    public artist: Artist;
+    public idArtist: number;
     public tracks: Array<Track>;
     public name: string;
     public year: number;
 
-    constructor(artist: Artist,  name: string, year: number) {
-        this.artist = artist;
+    constructor(idArtist: number,  name: string, year: number) {
+        this.idArtist = idArtist;
         this.tracks = new Array;
         this.name = name;
         this.year = year;

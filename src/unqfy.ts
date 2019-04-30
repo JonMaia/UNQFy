@@ -67,41 +67,16 @@ export class UNQfy {
         return this.artists.filter(artist => artist.name.includes(name));
     }
 
-    // albumData: objeto JS con los datos necesarios para crear un album
-    //   albumData.name (string)
-    //   albumData.year (number)
-    // retorna: el nuevo album creado
-
-    public getAlbumByNamePartial(name: string): Array<Album> {
-        return this.albumes.filter(album => album.name.includes(name));
-    }
-
-/*
-    public addAlbumIdArtist (artistId: number, albumData:AlbumInterface): Album {
-
-        return this.addAlbum({artist: 'dd', name: albumData.name, year: albumData.year})
-       
-        
-    }
-*/
-    public addAlbum(albumData: AlbumInterface): Album {  
-
-        /* Crea un album y lo agrega al artista con id artistId.
-            El objeto album creado debe tener (al menos):
-            - una propiedad name (string)
-            - una propiedad year (number)
-        */
-          
+    /**
+     * Crea un album y lo agrega a albumes, salvo en caso que el album del artista (con el artistId especifico)  
+     * ya exista, en ese caso lanza una excepcion
+     * @param albumData -  artistId: number; name: string; year: number; 
+     */
+    public addAlbum(albumData: AlbumInterface): Album {    
         let artistDate = this.getArtistById(albumData.artistId);
-
-        let album = this.getAlbumByNamePartial(albumData.name)
-                            .filter(alb => alb.artist.id === albumData.artistId);
-
-
         if(artistDate !== undefined){
-
-            if(album.length  == 0) {
-                    let newAlbum = new Album(artistDate, albumData.name, albumData.year);
+            if(!this.existAlbumToArtist(albumData.name,albumData.artistId)) {
+                    let newAlbum = new Album(albumData.artistId, albumData.name, albumData.year);
                     newAlbum.setId(this.getNextTrackId());
                     this.albumes.push(newAlbum);
                     return newAlbum;
@@ -112,13 +87,31 @@ export class UNQfy {
             throw new Error(`No existe artista con el Id: '${albumData.artistId}'`);
         }
     }
+    /**
+     * Retorna si al artista con el idArtista tiene o no un album con el nombre nameAlbum
+     * @param nameAlbum 
+     * @param idArtist
+     */
+    private existAlbumToArtist(nameAlbum:string, idArtist:number): boolean{
+        let albumes = this.filterAlbumByName(nameAlbum)
+        .filter(alb => alb.idArtist === idArtist);
 
+        return albumes.length > 0;
+    }
+
+    /**
+     * Retorna el siguiente id disponible para un album
+     */
     public getNextAlbumId() : number {
         let idNewAlbum = this.albumID;
         this.albumID ++;
         return idNewAlbum;
-    }
     
+    }
+    /**
+     * Elimina un album con el id recibido por parametro
+     * @param id 
+     */
     public deleteAlbum(id: number): void {
         let album = this.getAlbumById(id);
         if(album !== undefined) {
@@ -130,10 +123,10 @@ export class UNQfy {
         }
     }
 
-    private findAlbumByName(name: string): Album | undefined {
-        return this.albumes.find(album => album.name === name);
-    }
-        
+    /**
+     * Retorna un string con el nombre del artista con el id recicibo por parametro
+     * @param id 
+     */    
     public searchNameArtistById(id: Number): string {
         let artist = this.artists.find(artist => artist.id === id)
         if(artist !== undefined) {
@@ -142,6 +135,15 @@ export class UNQfy {
             throw new Error(`El Artista con el id: '${id}' no existe`);
         }
     }
+    /**
+     * Retorna true si existe un album con el nombre pasado por parametro
+     * @param name 
+     */
+    public existsAlbum(name: string): boolean {
+        return this.albumes.some(album => album.name === name);
+    }
+
+
 
     // trackData: objeto JS con los datos necesarios para crear un track
     //   trackData.name (string)
@@ -228,9 +230,9 @@ export class UNQfy {
 
     // artistName: nombre de artista(string)
     // retorna: los tracks interpredatos por el artista con nombre artistName
-    public getTracksMatchingArtist(artistName: string) {
+    public getTracksMatchingArtist(idArtist: number) {
         return this.albumes.filter((album) => {
-            if(album.artist.name === artistName){
+            if(album.idArtist === idArtist){
                 return album.tracks;
             }
         })
