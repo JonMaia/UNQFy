@@ -40,6 +40,10 @@ export class UNQfyTerminal {
                 this.getTrack(unqfy, argv);
                 break;
 
+            case 'searchByName':
+                this.searchByName(unqfy, argv);
+                break;
+
             default:
                 console.log('Operación desconocida.');
                 console.log('--help     para ver los comandos')
@@ -216,5 +220,9 @@ export class UNQfyTerminal {
         } else {
             console.log(tracks);
         }
+    }
+
+    private static searchByName(unqfy: UNQfy, argv: any) {
+        console.log(unqfy.searchByName(argv.name));
     }
 }

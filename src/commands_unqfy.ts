@@ -130,8 +130,14 @@ export const {argv} = require('yargs')
                     }
                 })
                 .example("$0 getTrack")
-
-            .example("$0 deleteArtist --name 'test'")
-
+                .example("$0 deleteArtist --name 'test'")
+                .command('searchByName', 'Busca y devuelve los artistas, albums, tracks y playlists que coincidan con el nombre pasado. Permite búsqueda parcial ', {
+                    name: {
+                        demand: false,
+                        alias: 'n',
+                        desc: 'Nombre parcial o completo',
+                        default: ''
+                    }
+                })
                 .help();
             
