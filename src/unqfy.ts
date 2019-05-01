@@ -53,13 +53,18 @@ export class UNQfy {
     }
 
     /**
-     * Busca y elimina el artista con el id pasado por parametro
+     * Busca y elimina el artista con el id pasado por parametro,
+     * también elimina los albums y tracks asociados al artista
      * @param id 
      */
     public deleteArtist(id: number): void {
         let artist = this.getArtistById(id);
         if(artist !== undefined) {
             this.artists.splice(this.artists.indexOf(artist), 1);
+            let albums = this.filterAlbumsByArtistId(artist.id);
+            if(albums !== undefined) {
+                albums.forEach(album => this.deleteAlbum(album.id));
+            }
         } else {
             throw new Error(`No existe un artista con id '${id}'`);
         }
@@ -90,10 +95,10 @@ export class UNQfy {
         let artistDate = this.getArtistById(albumData.artistId);
         if(artistDate !== undefined){
             if(!this.existAlbumToArtist(albumData.name,albumData.artistId)) {
-                    let newAlbum = new Album(albumData.artistId, albumData.name, albumData.year);
-                    newAlbum.setId(this.getNextTrackId());
-                    this.albumes.push(newAlbum);
-                    return newAlbum;
+                let newAlbum = new Album(albumData.artistId, albumData.name, albumData.year);
+                newAlbum.setId(this.getNextAlbumId());
+                this.albumes.push(newAlbum);
+                return newAlbum;
             } else {
                 throw new Error(`El album '${albumData.name}' del artista '${artistDate.name}' ya a sido creado`);
             }
@@ -101,6 +106,7 @@ export class UNQfy {
             throw new Error(`No existe artista con el Id: '${albumData.artistId}'`);
         }
     }
+
     /**
      * Retorna si al artista con el idArtista tiene o no un album con el nombre nameAlbum
      * @param nameAlbum 
@@ -120,8 +126,8 @@ export class UNQfy {
         let idNewAlbum = this.albumID;
         this.albumID ++;
         return idNewAlbum;
-    
     }
+
     /**
      * Elimina un album con el id recibido por parametro
      * @param id 

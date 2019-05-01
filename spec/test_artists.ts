@@ -5,6 +5,10 @@ function createArtist(unqfy: UNQfy, name: string, country: string) {
     return unqfy.addArtist({name: 'El Kuelgue', country: 'Argentina'});
 }
 
+function createAndAddAlbum(unqfy: UNQfy, artistId: number, albumName: string, albumYear: number) {
+    return unqfy.addAlbum({artistId, name: albumName, year: albumYear });
+}
+
 describe('Test administrador de artistas', () => {
 
     let unqfy: UNQfy;
@@ -28,12 +32,24 @@ describe('Test administrador de artistas', () => {
     });
 
 
-    it('Un artista debe poder ser eliminado por su nombre', () => {
+    it('Un artista debe poder ser borrado por su id', () => {
         let artist = createArtist(unqfy, 'El Kuelgue', 'Argentina');
 
         unqfy.deleteArtist(artist.id);
 
-        assert.isFalse(unqfy.existsArtist('El Kuelgue'));
+        assert.isUndefined(unqfy.getArtistById(artist.id));
+    });
+
+    it('Al borrar un artista sus albumes deben borrarse también', () => {
+        let artist = createArtist(unqfy, 'El Kuelgue', 'Argentina');
+        let album = createAndAddAlbum(unqfy, artist.id, 'Ruli', 2013);
+
+        assert.isTrue(unqfy.getAlbumById(album.id) !== undefined);
+
+        unqfy.deleteArtist(artist.id);
+
+        assert.isUndefined(unqfy.getArtistById(artist.id));
+        assert.isUndefined(unqfy.getAlbumById(album.id));
     });
 
     it('Borrar un artista con un id inexistente, debe lanzar una excepción', () => {
