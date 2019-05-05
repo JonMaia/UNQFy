@@ -1,4 +1,3 @@
-import { Artist } from "./artist";
 import { Track } from "./track";
 
 export class Album {
@@ -20,5 +19,11 @@ export class Album {
         this.id = id;
     }
 
+    public hasTrack(trackName: string): boolean {
+        return this.tracks.some(track => track.name === trackName);
+    }
 
+    public addTrack(track: Track): void {
+        this.tracks.push(track);
+    }
 }

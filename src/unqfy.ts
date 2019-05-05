@@ -163,34 +163,28 @@ export class UNQfy {
         return this.albumes.some(album => album.name === name);
     }
 
-
-
-    // trackData: objeto JS con los datos necesarios para crear un track
-    //   trackData.name (string)
-    //   trackData.duration (number)
-    //   trackData.genres (lista de strings)
-    // retorna: el nuevo track creado
+    /**
+     * Se crea un nuevo track, pero antes se verifica que el album a donde se va a agregar exista y que no exista un 
+     * track con el mismo nombre en el album, caso contrario lanzara excepción
+     * @returns track
+     * @param albumId 
+     * @param trackData 
+     */
     public addTrack(albumId: number, trackData: TrackInterface) {
-    /* Crea un track y lo agrega al album con id albumId.
-    El objeto track creado debe tener (al menos):
-        - una propiedad name (string),
-        - una propiedad duration (number),
-        - una propiedad genres (lista de strings)*/
-        let track = this.getTrackByName(trackData.name);
-        let newTrack = new Track(trackData.name, trackData.duration, trackData.genres, albumId);
-        newTrack.id = this.getNextTrackId();
         let album = this.getAlbumById(albumId);
         if (album !== undefined) {
-            if(track === undefined){
+            if(!album.hasTrack(trackData.name)) {
+                let newTrack = new Track(trackData.name, trackData.duration, trackData.genres, albumId);
+                newTrack.id = this.getNextTrackId();
                 this.tracks.push(newTrack);
+                album.addTrack(newTrack);
+                return newTrack;
             } else {
-                throw new Error(`El track '${track.name}' ya se encuentra en el album`);
+                throw new Error(`El track '${trackData.name}' ya se encuentra en el album`);
             }    
         } else {
             throw new Error(`El album no existe, deberia crearlo`);
         }
-        
-        return newTrack;
     }
 
     public deleteTrack(trackId: number) {
