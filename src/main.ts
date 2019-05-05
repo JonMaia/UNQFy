@@ -58,9 +58,9 @@ function addTrack(unqfy: UNQfy, argv: any) {
     let name = argv.name;
     let duration = argv.duration;
     let genres = argv.genres;
+    let album = argv.album;
     try{
-        // TODO: Cambiar String Album por el objeto
-        let track = unqfy.addTrack(1,{name, duration, genres});
+        let track = unqfy.addTrack(album,{name, duration, genres});
         console.log(`El '${track}' ha sido añadido`);
     } catch(e) {
         console.log(`Error: ${e.message}`);

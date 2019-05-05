@@ -1,19 +1,16 @@
 export class Track {
 
-    public id: number;
+    public id: number = 0;
     public name: string;
     public duration: number;
     public genres: Array<string>;
+    public album: number;
 
-    constructor(name: string, duration: number, genres: Array<string>) {
+    constructor(name: string, duration: number, genres: Array<string>, albumId: number) {
         this.name = name;
         this.duration = duration;
         this.genres = genres;
-        this.id = Math.floor(Math.random() * 1000);
-    }
-
-    public setID(): void {
-        this.id = Math.floor(Math.random() * 1001);
+        this.album = albumId;
     }
 
     public getGenres(){

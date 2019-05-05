@@ -1,10 +1,11 @@
 const picklify = require('picklify'); // para cargar/guarfar unqfy
 import fs from 'fs'; // para cargar/guarfar unqfy
 import {Artist} from './model/artist';
-import {ArtistInterface, AlbumInterface} from './model/interfaces';
+import {ArtistInterface, AlbumInterface, PlayListInterface} from './model/interfaces';
 import { Album } from './model/album';
 import { Track } from './model/track';
 import {TrackInterface} from './model/interfaces';
+import { Playlist } from './model/playlist';
 
 // COMPLETAR POR EL ALUMNO: exportar todas las clases que necesiten ser utilizadas desde un modulo cliente
 export class UNQfy {
@@ -15,12 +16,14 @@ export class UNQfy {
     private tracks: Array<Track>;
     private trackID: number = 0;
     private albumID: number = 0;
+    private playLists: Array<Playlist>;
+    private playListID: number = 0;
 
     constructor() {
         this.artists = new Array;
         this.albumes = new Array;
         this.tracks = new Array;
-        this.tracks = new Array;
+        this.playLists = new Array;
     }
 
     /**
@@ -155,12 +158,11 @@ export class UNQfy {
         - una propiedad duration (number),
         - una propiedad genres (lista de strings)*/
         let track = this.getTrackByName(trackData.name);
-        let newTrack = new Track(trackData.name, trackData.duration, trackData.genres);
+        let newTrack = new Track(trackData.name, trackData.duration, trackData.genres, albumId);
         newTrack.id = this.getNextTrackId();
         let album = this.getAlbumById(albumId);
         if (album !== undefined) {
             if(track === undefined){
-                album.tracks.push(newTrack); // Agregar solo a album o a tracks?
                 this.tracks.push(newTrack);
             } else {
                 throw new Error(`El track '${track.name}' ya se encuentra en el album`);
@@ -176,7 +178,7 @@ export class UNQfy {
         let track = this.getTrackById(trackId);
         if(track !== undefined) {
             this.tracks.splice(this.tracks.indexOf(track), 1);
-            // eliminar del playlist
+            this.deleteTrackInPlayLists(track);
         }
     }
 
@@ -206,8 +208,8 @@ export class UNQfy {
         return this.tracks.find(track => track.id === id);
     }
 
-    public getPlaylistById(id: number) {
-
+    public getPlaylistById(id: number): Playlist | undefined{
+        return this.playLists.find(playlist => playlist.id == id);
     }
 
     // genres: array de generos(strings)
@@ -242,7 +244,44 @@ export class UNQfy {
         * un metodo duration() que retorne la duración de la playlist.
         * un metodo hasTrack(aTrack) que retorna true si aTrack se encuentra en la playlist.
     */
+        let playList = this.getPlaylistByName(name);
+        let newPlayList = new Playlist(name, genresToInclude, maxDuration);
+        newPlayList.id = this.getNextPlayListId();
+        let tracks: Array<Track> = [];
+        if (playList === undefined) {
+            this.tracks.forEach(track => {
+                if(newPlayList.getDuration() + track.duration < maxDuration && track.getGenres === genresToInclude ) {
+                    tracks.push(track);
+                    newPlayList.duration += track.duration;
+                }
+            })  
+        } else {
+            throw new Error('El playlist que se intenta crear ya existe')
+        }
+        newPlayList.tracks.concat(tracks);
+        return newPlayList;
+    }
 
+    public getNextPlayListId(): number {
+        let playListId = this.playListID;
+        this.playListID ++;
+        return playListId;
+    }
+
+    public getPlaylistByName(name: string) {
+        return this.playLists.find(playlist => playlist.name === name);
+    }
+
+    public deleteTrackInPlayLists(track: Track){
+        this.playLists.forEach(playlist => {
+            playlist.tracks.splice(1,1,track);
+        })
+    }
+
+    public addTrackInPlayList(track: Track, playlist: Playlist){
+        if ( !playlist.hasTrack(track)) {
+            playlist.tracks.push(track);
+        }
     }
 
     public searchByName(name: string) {
@@ -262,7 +301,7 @@ export class UNQfy {
     public static load(filename: string) {
         const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
         //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
-        const classes = [UNQfy, Artist, Album, Track];
+        const classes = [UNQfy, Artist, Album, Track, Playlist];
         return picklify.unpicklify(JSON.parse(serializedData), classes);
     }
 }
