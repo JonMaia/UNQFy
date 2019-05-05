@@ -87,8 +87,8 @@ export class UNQfy {
     }
 
     /**
-     * Crea un album y lo agrega a albumes, salvo en caso que el album del artista (con el artistId especifico)  
-     * ya exista, en ese caso lanza una excepcion
+     * Crea un album, lo agrega a albumes y agrega agrega ese album al lista de albumes del artista correspondiente,  
+     * salvo en caso que el album del artista (con el artistId especifico) ya exista, en ese caso lanza una excepcion
      * @param albumData -  artistId: number; name: string; year: number; 
      */
     public addAlbum(albumData: AlbumInterface): Album {    
@@ -98,6 +98,7 @@ export class UNQfy {
                 let newAlbum = new Album(albumData.artistId, albumData.name, albumData.year);
                 newAlbum.setId(this.getNextAlbumId());
                 this.albumes.push(newAlbum);
+                artistDate.addAlbum(newAlbum);
                 return newAlbum;
             } else {
                 throw new Error(`El album '${albumData.name}' del artista '${artistDate.name}' ya a sido creado`);
@@ -135,6 +136,7 @@ export class UNQfy {
     public deleteAlbum(id: number): void {
         let album = this.getAlbumById(id);
         if(album !== undefined) {
+            this.deleteTracksOfAlbum(album.tracks);
             //let tracksAlbumes = album.tracks;
             //tracksAlbumes.find(track => this.deleteTrack(track.id));    
             this.albumes.splice(this.albumes.indexOf(album),1);
@@ -143,11 +145,17 @@ export class UNQfy {
         }
     }
 
+    public deleteTracksOfAlbum(tracksList: Array<Track>):void{
+        for (let t of tracksList) {
+            this.tracks.splice(this.tracks.indexOf(t), 1);
+         }
+    }
+
     /**
      * Retorna un string con el nombre del artista con el id recicibo por parametro
      * @param id 
      */    
-    public searchNameArtistById(id: Number): string {
+    public searchNameArtistById(id: number): string {
         let artist = this.artists.find(artist => artist.id === id)
         if(artist !== undefined) {
             return artist.name;
@@ -159,8 +167,8 @@ export class UNQfy {
      * Retorna true si existe un album con el nombre pasado por parametro
      * @param name 
      */
-    public existsAlbum(name: string): boolean {
-        return this.albumes.some(album => album.name === name);
+    public existsAlbum(idAlbum: number): boolean {
+        return this.albumes.some(album => album.id === idAlbum);
     }
 
     /**
@@ -251,6 +259,10 @@ export class UNQfy {
             }, []);
         }
         return new Array;
+    }
+
+    public existsTrack(idTrack: number): boolean {
+        return this.tracks.some(track => track.id === idTrack);
     }
 
     private filterAlbumsByArtistId(idArtist: number): Array<Album> | undefined {

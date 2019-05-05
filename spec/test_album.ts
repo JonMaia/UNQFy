@@ -4,11 +4,11 @@ import {UNQfy} from '../src/unqfy';
 function createAlbum(unqfy: UNQfy, idArtist:number, name: string, year: number) {
     return unqfy.addAlbum({artistId: idArtist, name: 'Bocanada', year: 1999});
 }
-/*
+
 function createTrack(unqfy: UNQfy,idAlbum:number, name: string, duration: number, genres: Array<string>) {
-    return unqfy.addTrack(idAlbum,{name: 'Puente', duration: 434, genres: genrs});
+    return unqfy.addTrack(idAlbum,{name: 'Puente', duration: 434, genres:genres});
 }
-*/
+
 
 describe('Test administrador de albumes', () => {
     let unqfy: UNQfy;
@@ -53,11 +53,16 @@ describe('Test administrador de albumes', () => {
         let genrs = new Array;
         let artist =  unqfy.addArtist({name: 'Cerati', country: 'Argentina'});    
         let album = createAlbum(unqfy,artist.id, 'Bocanada', 1999);
-       // let track = createTrack(unqfy,album.id,'Puente', 434, genrs);
+        let track = createTrack(unqfy,album.id,'Puente', 434, genrs);
+        let idTrack = track.id;
+        let idAlbum = album.id;
         
+        assert.isTrue(unqfy.existsAlbum(idAlbum));
+        assert.isTrue(unqfy.existsTrack(idTrack));
+
         unqfy.deleteAlbum(album.id);
 
-        assert.isFalse(unqfy.existsAlbum('Bocanada'));
-        //assert.isFalse(unqfy.existsTrack('Puente'));
+        assert.isFalse(unqfy.existsAlbum(idAlbum));
+        assert.isFalse(unqfy.existsTrack(idTrack));
     });
 });
