@@ -91,12 +91,17 @@ export const {argv} = require('yargs')
                     duration: {
                         demand: true,
                         alias: 'd',
-                        desc: 'Duracion de la cancion'
+                        desc: 'Duracion de la canción (en segundos)'
                     },
                     genres: {
                         demand: true,
                         alias: 'g',
                         desc: 'Los generos del track'
+                    },
+                    idAlbum: {
+                        demand: true,
+                        alias: 'a',
+                        desc: 'Id del albúm al que pertenece el track'
                     }
                 })
                 .example("$0 addTrack --help")

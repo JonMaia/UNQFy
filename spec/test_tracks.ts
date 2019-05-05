@@ -2,6 +2,7 @@ import {assert} from 'chai';
 import {UNQfy} from '../src/unqfy';
 import { Track } from '../src/model/track';
 import { Album } from '../src/model/album';
+import { Artist } from '../src/model/artist';
 
 function createTrack(unqfy: UNQfy,album: number, name: string, duration: number, genres: Array<string>) {
 
@@ -13,17 +14,23 @@ function createAndAddAlbum(unqfy: UNQfy, artistId: number, albumName: string, al
     return unqfy.addAlbum({artistId, name: albumName, year: albumYear });   
 }
 
+function createArtist(unqfy: UNQfy, name: string, country: string) {
+    return unqfy.addArtist({name, country});
+}
+
 describe('Test administrador de tracks', () => {
 
     let unqfy: UNQfy;
     let genres: Array<string>;
     let track: Track;
     let album: Album;
+    let artist: Artist;
 
     beforeEach(() => {
         unqfy = new UNQfy();
         genres = ['Rock', 'Metal']
-        album = createAndAddAlbum(unqfy, 123, 'The Book of Souls', 2015);
+        artist = createArtist(unqfy, 'Iron Maiden', 'Reino Unido');
+        album = createAndAddAlbum(unqfy, artist.id, 'The Book of Souls', 2015);
         track = createTrack(unqfy, album.id, 'If Eternity Should Fail', 8, genres);
     })
 
