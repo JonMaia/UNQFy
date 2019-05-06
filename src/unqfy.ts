@@ -262,10 +262,12 @@ export class UNQfy {
 
     // genres: array de generos(strings)
     // retorna: los tracks que contenga alguno de los generos en el parametro genres
-    public getTracksMatchingGenres(genres: Array<string>): Array<Track> | undefined {
+    public getTracksMatchingGenres(genres: Array<string>): Array<Track> {
         return this.tracks.filter((track) => {    
             if(track.containsGenre(genres)) {
                 return track;
+            } else {
+                return new Array;
             }
         })
     }
@@ -297,7 +299,7 @@ export class UNQfy {
     // genresToInclude: array de generos
     // maxDuration: duración en segundos
     // retorna: la nueva playlist creada
-    public createPlaylist(name: string, genresToInclude: any, maxDuration: any) {
+    public createPlaylist(name: string, genresToInclude: Array<string>, maxDuration: number) {
     /*** Crea una playlist y la agrega a unqfy. ***
         El objeto playlist creado debe soportar (al menos):
         * una propiedad name (string)
@@ -305,7 +307,7 @@ export class UNQfy {
         * un metodo hasTrack(aTrack) que retorna true si aTrack se encuentra en la playlist.
     */
         let playList = this.getPlaylistByName(name);
-        let newPlayList = new Playlist(name, genresToInclude, maxDuration);
+        let newPlayList = new Playlist(name, maxDuration, genresToInclude);
         newPlayList.id = this.getNextPlayListId();
         let tracks: Array<Track> = [];
         if (playList === undefined) {
