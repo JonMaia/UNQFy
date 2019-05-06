@@ -26,4 +26,8 @@ export class Album {
     public addTrack(track: Track): void {
         this.tracks.push(track);
     }
+
+    public deleteTrack(track: Track): void {
+        this.tracks.splice(this.tracks.indexOf(track), 1);
+    }
 }

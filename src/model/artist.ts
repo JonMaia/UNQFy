@@ -21,4 +21,8 @@ export class Artist {
     public addAlbum(album: Album): void {
         this.albums.push(album);
     }
+
+    public deleteAlbum(album: Album): void {
+        this.albums.splice(this.albums.indexOf(album), 1);
+    }
 }

@@ -60,13 +60,28 @@ export class UNQfy {
     public deleteArtist(id: number): void {
         let artist = this.getArtistById(id);
         if(artist !== undefined) {
-            this.artists.splice(this.artists.indexOf(artist), 1);
-            let albums = this.filterAlbumsByArtistId(artist.id);
-            if(albums !== undefined) {
-                albums.forEach(album => this.deleteAlbum(album.id));
-            }
+            this.removeArtist(artist);
         } else {
             throw new Error(`No existe un artista con id '${id}'`);
+        }
+    }
+
+    private removeArtist(artist: Artist): void {
+        this.deleteReverse(artist.albums, this.removeAlbum.bind(this));
+        this.artists.splice(this.artists.indexOf(artist), 1);
+    }
+
+    /**
+     * Elimina los elementos de un array desde el último elemento al primero.
+     * Ya que al eliminar de manera normal (inicio a fin) cuando se realiza un splice los index se vuelven a calcular y
+     * esto provoca que muchos elementos no se eliminen dentro de una iteración
+     * @param array con elementos a eliminar
+     * @param deleteFunction que se ejecutará para eliminar el elemento
+     */
+    private deleteReverse(array: Array<any>, deleteFunction: Function): void {
+        for (let index = array.length - 1; index >= 0; index--) {
+            let element = array[index];
+            deleteFunction(element);
         }
     }
 
@@ -136,19 +151,19 @@ export class UNQfy {
     public deleteAlbum(id: number): void {
         let album = this.getAlbumById(id);
         if(album !== undefined) {
-            this.deleteTracksOfAlbum(album.tracks);
-            //let tracksAlbumes = album.tracks;
-            //tracksAlbumes.find(track => this.deleteTrack(track.id));    
-            this.albumes.splice(this.albumes.indexOf(album),1);
+            this.removeAlbum(album);
         } else {
             throw new Error(`El album con el id:${id} no existe`);
         }
     }
 
-    public deleteTracksOfAlbum(tracksList: Array<Track>):void{
-        for (let t of tracksList) {
-            this.tracks.splice(this.tracks.indexOf(t), 1);
-         }
+    private removeAlbum(album: Album): void {
+        this.deleteReverse(album.tracks, this.removeTrack.bind(this));
+        let artist = this.getArtistById(album.idArtist);
+        if(artist !== undefined) {
+            artist.deleteAlbum(album);
+        }
+        this.albumes.splice(this.albumes.indexOf(album),1);
     }
 
     /**
@@ -198,9 +213,17 @@ export class UNQfy {
     public deleteTrack(trackId: number) {
         let track = this.getTrackById(trackId);
         if(track !== undefined) {
-            this.tracks.splice(this.tracks.indexOf(track), 1);
-            this.deleteTrackInPlayLists(track);
+            this.removeTrack(track);
         }
+    }
+
+    private removeTrack(track: Track) {
+        let album = this.getAlbumById(track.album);
+        if(album !== undefined) {
+            album.deleteTrack(track);
+        }
+        this.deleteTrackInPlayLists(track);
+        this.tracks.splice(this.tracks.indexOf(track), 1);
     }
 
     public getTrackByName(name: string) {
