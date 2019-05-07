@@ -312,7 +312,8 @@ export class UNQfy {
             newPlayList.id = this.getNextPlayListId();
             this.tracks.forEach(track => {
                 newPlayList.addTrackPL(track);
-            })  
+            });
+            this.playLists.push(newPlayList);
             return newPlayList;
         } else {
             throw new Error('El playlist que se intenta crear ya existe')
@@ -327,6 +328,10 @@ export class UNQfy {
 
     public getPlaylistByName(name: string) {
         return this.playLists.find(playlist => playlist.name === name);
+    }
+
+    public getPlaylistByPartialName(name: string): Array<Playlist> {
+        return this.playLists.filter(playlist => playlist.name.includes(name));
     }
 
     public deleteTrackInPlayLists(track: Track){
@@ -349,12 +354,12 @@ export class UNQfy {
         let artists = this.filterArtistsByName(name);
         let albums = this.filterAlbumByName(name);
         let tracks = this.getTrackByPartialName(name);
-        let playList = this.getPlaylistByName(name);
+        let playlists = this.getPlaylistByPartialName(name);
         return {
             artists,
             albums,
             tracks,
-            playList
+            playlists
         }
     }
 
