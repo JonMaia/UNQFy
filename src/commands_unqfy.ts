@@ -169,6 +169,25 @@ export const {argv} = require('yargs')
                         default: ''
                     }
                 })
+                .example("$0 createPlaylist --name 'Metal del bueno' --duration 900 --genres ['Metal', 'Rock']")
+                .command('getPlaylist', 'Retorna el playlist que contenga esa id', {
+                    id: {
+                        demand: false,
+                        alias: 'i',
+                        desc: 'Id del playlist buscado',
+                        default: '-1'
+                    }
+                })
+                .example("$0 getPlaylist --id 3")
+                .command('deletePlaylist', 'Elimina el playlist con el id o nombre pasado como parametro', {
+                    id: {
+                        demand: false,
+                        alias: 'i',
+                        desc: 'Id del playlist que sera eliminado',
+                        default: '-1'
+                    }
+                })
+                .command("$0 deletePlaylist --id 3")
                 .command('searchByName', 'Busca y devuelve los artistas, albums, tracks y playlists que coincidan con el nombre pasado. Permite búsqueda parcial ', {
                     name: {
                         demand: false,

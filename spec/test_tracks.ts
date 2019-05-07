@@ -62,5 +62,13 @@ describe('Test administrador de tracks', () => {
         unqfy.deleteTrack(track.id);
         assert.isFalse(unqfy.existsTrack(track.id));
         assert.isFalse(playlist.hasTrack(track));
-    })
+    });
+
+    it('Al eliminar un track tambien se borra del album', () => {
+        assert.isTrue(unqfy.existsTrack(track.id));
+        assert.isTrue(album.hasTrack(track.name));
+        unqfy.deleteTrack(track.id);
+        assert.isFalse(unqfy.existsTrack(track.id));
+        assert.isFalse(album.hasTrack(track.name));
+    });
 });

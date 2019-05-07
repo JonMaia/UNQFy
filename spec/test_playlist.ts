@@ -27,6 +27,7 @@ describe('Test administrador de tracks', () => {
 
     let unqfy: UNQfy;
     let genres: Array<string>;
+    let genres2: Array<string>;
     let track: Track;
     let track2: Track;
     let track3: Track;
@@ -38,22 +39,30 @@ describe('Test administrador de tracks', () => {
     beforeEach(() => {
         unqfy = new UNQfy();
         genres = ['Metal']
+        genres2 = ['Metal', 'Rock']
         artist = createArtist(unqfy, 'Iron Maiden', 'Reino Unido');
         album = createAndAddAlbum(unqfy, artist.id, 'The Book of Souls', 2015);
-        track = createTrack(unqfy, album.id, 'If Eternity Should Fail', 200, genres);
-        track2 = createTrack(unqfy, album.id, 'The Book of Souls', 200, genres);
-        track3 = createTrack(unqfy, album.id, 'Empire of the Clouds', 200, genres);
-        track4 = createTrack(unqfy, album.id, 'Speed of Light', 200, genres)
-        playlist = createPlaylist(unqfy, 'Metal del bueno', ['Metal'], 700);
+        track = createTrack(unqfy, album.id, 'If Eternity Should Fail', 200, genres2);
+        track2 = createTrack(unqfy, album.id, 'The Book of Souls', 200, genres2);
+        track3 = createTrack(unqfy, album.id, 'Empire of the Clouds', 200, genres2);
+        track4 = createTrack(unqfy, album.id, 'Speed of Light', 200, genres2)
+        playlist = createPlaylist(unqfy, 'Metal del bueno', genres, 800);
     });
 
     it('Creación del playlist', () => {
         assert.equal(playlist.name, 'Metal del bueno');
-        assert.equal(playlist.duration(), 700);
-        assert.equal(playlist.genres, genres);
+        assert.equal(playlist.duration(), 800);
+        assert.isTrue(playlist.genres === genres);
         assert.isTrue(playlist.hasTrack(track));
         assert.isTrue(playlist.hasTrack(track2));
         assert.isTrue(playlist.hasTrack(track3));
         assert.isTrue(playlist.hasTrack(track4));
     });
+
+    it('Dado un playlist que contiene track2, cuando se elimina se quita de la playlist', () => {
+        assert.isTrue(playlist.hasTrack(track));
+        unqfy.deleteTrack(track.id);
+        assert.isFalse(playlist.hasTrack(track));
+    });
+
 });    

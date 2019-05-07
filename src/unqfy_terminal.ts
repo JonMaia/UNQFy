@@ -18,7 +18,7 @@ export class UNQfyTerminal {
     
             case 'getAlbum':
                 this.getAlbum(unqfy, argv);
-            break;     
+                break;     
             
             case 'addAlbum': 
                 this.addAlbum(unqfy, argv);
@@ -46,10 +46,65 @@ export class UNQfyTerminal {
             
             case 'createPlaylist':
                 this.createPlaylist(unqfy, argv);
+                break;
+            
+            case 'getPlaylist':
+                this.getPlaylist(unqfy, argv);
+                break;
+            
+            case 'deletePlaylist':
+                this.deletePlaylist(unqfy, argv);
+                break;
 
             default:
                 console.log('Operación desconocida.');
                 console.log('--help     para ver los comandos')
+        }
+    }
+
+    public static deletePlaylist(unqfy: UNQfy, argv: any) {
+        let id = Number(argv.id);
+        if(isNaN(id)) {
+            console.log(`El id '${argv.id}' no es valido. Debe ingresar un número.`);
+            return;
+        }
+        try {
+            unqfy.deletePlayList(id);
+            console.log(`El playlist '${id}' fue borrado.`);
+        } catch(e) {
+            console.log(`Error: ${e.message}`);
+        }
+    }
+
+
+    public static getPlaylist(unqfy: UNQfy, argv: any) {
+        let id = parseInt(argv.id);
+        if(isNaN(id)) {
+            console.log(`El id '${argv.id}' no es valido. Debe ingresar un número.`);
+            return;
+        }
+        if(id !== -1) {
+            this.findPlaylistById(unqfy, id);
+        } else {
+            this.findPlaylistByName(unqfy, argv.name);
+        }
+    }
+
+    public static findPlaylistByName(unqfy: UNQfy, name: any) {
+        let playlist = unqfy.getPlaylistByName(name);
+        if(playlist !== undefined) {
+            console.log(playlist);
+        } else {
+            console.log(`No se encontro el playlist que corresponda con '${name}'`);
+        }
+    }
+
+    public static findPlaylistById(unqfy: UNQfy, id: number) {
+        let playlist = unqfy.getPlaylistById(id);
+        if(playlist !== undefined) {
+            console.log(playlist);
+        } else {
+            console.log(`No se encontro playlist con id: ${id}`);
         }
     }
 
