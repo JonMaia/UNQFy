@@ -55,10 +55,10 @@ export class UNQfyTerminal {
 
     static createPlaylist(unqfy: UNQfy, argv: any) {
         let name = argv.name;
-        let genresToInclude = argv.genresToInclude;
-        let maxDuration = argv.maxDuration;
+        let genres = argv.genres;
+        let duration = argv.duration;
         try {
-            let playlist = unqfy.createPlaylist(name, genresToInclude, maxDuration);
+            let playlist = unqfy.createPlaylist(name, genres, duration);
             console.log(playlist);
         } catch(e) {
             console.log(`Error: ${e.message}`);

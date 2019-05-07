@@ -294,6 +294,16 @@ export class UNQfy {
         return this.albumes.filter(album => album.idArtist === idArtist);
     }
 
+    public deletePlayList(playListID: number) {
+        let playList = this.getPlaylistById(playListID);
+        if(playList !== undefined) {
+            this.removePlayList(playList);
+        }
+    }
+
+    private removePlayList(playList: Playlist) {
+        this.playLists.splice(this.playLists.indexOf(playList), 1);
+    }
 
     // name: nombre de la playlist
     // genresToInclude: array de generos

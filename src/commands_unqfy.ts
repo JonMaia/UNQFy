@@ -149,6 +149,26 @@ export const {argv} = require('yargs')
                 })
                 .example("$0 getTrack")
                 .example("$0 deleteTrack --id 0")
+                .command('createPlaylist', 'Crea un playlist con los generos dados y una duracion maxima', {
+                    name: {
+                        demand: false,
+                        alias: 'n',
+                        desc: 'Nombre parcial o completo del playlist',
+                        default: ''
+                    },
+                    duration: {
+                        demand: false,
+                        alias: 'd',
+                        desc: 'Duracion maxima que tiene el playlist',
+                        default: '-1'
+                    },
+                    genres: {
+                        demand: false,
+                        alias: 'g',
+                        desc: 'Generos que contiene el playlist. \nCada genero debe estar separado por coma',
+                        default: ''
+                    }
+                })
                 .command('searchByName', 'Busca y devuelve los artistas, albums, tracks y playlists que coincidan con el nombre pasado. Permite búsqueda parcial ', {
                     name: {
                         demand: false,

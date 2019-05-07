@@ -16,3 +16,5 @@ ts-node src/main addTrack --idAlbum 1 --name 'Teddy Picker' --duration 163 --gen
 ts-node src/main addTrack --idAlbum 2 --name 'Thriller' --duration 358 --genres 'Pop'
 ts-node src/main addTrack --idAlbum 2 --name 'Beat It' --duration 258 --genres 'Pop'
 ts-node src/main addTrack --idAlbum 2 --name 'Billie Jean' --duration 296 --genres 'Pop'
+
+ts-node src/main createPlaylist --name 'Un poco de Pop' --duration 900 --genres 'Pop'
