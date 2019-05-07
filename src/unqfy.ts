@@ -230,7 +230,7 @@ export class UNQfy {
         return this.tracks.find(track => track.name === name);
     }
 
-    public getTrackByNamePartial(name: string): Array<Track> {
+    public getTrackByPartialName(name: string): Array<Track> {
         return this.tracks.filter(track => track.name.includes(name));
     }
 
@@ -250,6 +250,10 @@ export class UNQfy {
 
     public getAlbumById(id: number): Album | undefined {
         return this.albumes.find(album => album.id === id);
+    }
+
+    public getAlbumsByArtistId(idArtist: number): Array<Album> {
+        return this.albumes.filter(album => album.idArtist === idArtist);
     }
 
     public getTrackById(id: number): Track | undefined {
@@ -344,7 +348,7 @@ export class UNQfy {
     public searchByName(name: string) {
         let artists = this.filterArtistsByName(name);
         let albums = this.filterAlbumByName(name);
-        let tracks = this.getTrackByNamePartial(name);
+        let tracks = this.getTrackByPartialName(name);
         let playList = this.getPlaylistByName(name);
         return {
             artists,

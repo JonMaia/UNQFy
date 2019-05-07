@@ -91,7 +91,7 @@ export class UNQfyTerminal {
     private static addTrack(unqfy: UNQfy, argv: any) {
         let name = argv.name;
         let duration = argv.duration;
-        let genres = argv.genres;
+        let genres = argv.genres.split(",");
         let idAlbum = argv.idAlbum;
         try{
             let track = unqfy.addTrack(idAlbum, {name, duration, genres});
@@ -147,13 +147,16 @@ export class UNQfyTerminal {
     }
         
     private static getAlbum(unqfy: UNQfy, argv: any) {
-        let id = parseInt(argv.id);
-        if(isNaN(id)) {
-            console.log(`El id '${argv.id}' no es valido. Debe ingresar un número.`);
+        let id = Number(argv.id);
+        let idArtist = Number(argv.idArtist);
+        if(isNaN(id) || isNaN(idArtist)) {
+            console.log(`El id o idArtist '${argv.id}' no es valido. Debe ingresar un número.`);
             return;
         }
         if(id !== -1) {
             this.findAlbumById(unqfy, id);
+        } else if(idArtist !== -1) {
+            this.findAlbumByArtistId(unqfy, idArtist);
         } else {
             this.findAlbumByName(unqfy, argv.name);
         }
@@ -164,7 +167,16 @@ export class UNQfyTerminal {
         if(album !== undefined) {
             console.log(album);
         } else {
-            console.log(`No se encontro artista con id: ${id}`);
+            console.log(`No se encontro album con id: ${id}`);
+        }
+    }
+
+    private static findAlbumByArtistId(unqfy: UNQfy, id: number) {
+        let albums = unqfy.getAlbumsByArtistId(id);
+        if(albums.length > 0) {
+            console.log(albums);
+        } else {
+            console.log(`No se encontro album con Artist Id: ${id}`);
         }
     }
     
@@ -208,12 +220,17 @@ export class UNQfyTerminal {
 
     private static getTrack(unqfy: UNQfy, argv: any) {
         let trackId = Number(argv.id);
-        if(isNaN(trackId)) {
-            console.log(`El id '${argv.id}' no es valido. Debe ingresar un número.`);
+        let artistId = Number(argv.idArtist);
+        if(isNaN(trackId) || isNaN(artistId)) {
+            console.log(`El id o artistId '${argv.id}' no es valido. Debe ingresar un número.`);
             return;
         }
         if(trackId !== -1) {
             this.getTrackById(unqfy, trackId);
+        } else if(artistId !== -1) {
+            this.getTracksByArtistId(unqfy, artistId);
+        } else if(argv.genres !== '') {
+            this.getTracksByGenres(unqfy, argv.genres);
         } else {
             this.findTrackByName(unqfy, argv.name);
         }
@@ -228,8 +245,27 @@ export class UNQfyTerminal {
         }
     }
 
+    private static getTracksByArtistId(unqfy: UNQfy, artistId: number):void {
+        let tracks = unqfy.getTracksMatchingArtist(artistId);
+        if(tracks.length > 0) {
+            console.log(tracks);
+        } else {
+            console.log(`No se encontraron tracks que correspondan al artist Id '${artistId}'`);
+        }
+    }
+
+    private static getTracksByGenres(unqfy: UNQfy, genresString: string):void {
+        let genres = genresString.split(",");
+        let tracks = unqfy.getTracksMatchingGenres(genres);
+        if(tracks !== undefined && tracks.length > 0) {
+            console.log(tracks);
+        } else {
+            console.log(`No se encontraron tracks que correspondan con los generos '${genresString}'`);
+        }
+    }
+
     private static findTrackByName(unqfy: UNQfy, name: string) {
-        let tracks = unqfy.getTrackByNamePartial(name);
+        let tracks = unqfy.getTrackByPartialName(name);
         if(tracks.length === 0) {
             console.log(`No se encontraron tracks que correspondan con '${name}'`);
         } else {

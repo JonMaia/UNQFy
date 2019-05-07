@@ -49,6 +49,12 @@ export const {argv} = require('yargs')
                         alias: 'i',
                         desc: 'Id del album',
                         default: '-1'
+                    },
+                    idArtist: {
+                        demand: false,
+                        alias: 'a',
+                        desc: 'Id del artista',
+                        default: '-1'
                     }
                 })
                 .example("$0 getAlbum")
@@ -71,7 +77,7 @@ export const {argv} = require('yargs')
                     }
                 })
                 .example("$0 addAlbum --help")
-                .example("$0 addAlbum --artist 1 --name 'test' --year '2019'")
+                .example("$0 addAlbum --artistId 1 --name 'test' --year '2019'")
                 .command('deleteAlbum', 
                 'Elimina un album junto a sus tracks. Los tracks también son eliminados de los playlist', {
                     id: {
@@ -105,7 +111,7 @@ export const {argv} = require('yargs')
                     }
                 })
                 .example("$0 addTrack --help")
-                .example("$0 addTrack --name 'test' --duration 10 --genres 'Rock, Metal'")
+                .example("$0 addTrack --name 'test' --duration 10 --genres 'Rock, Metal' --idAlbum 1")
                 .command('deleteTrack', 
                     'Elimina un track del album y de la playlist', {
                     id: {
@@ -127,10 +133,22 @@ export const {argv} = require('yargs')
                         alias: 'i',
                         desc: 'Id del Track',
                         default: '-1'
+                    },
+                    idArtist: {
+                        demand: false,
+                        alias: 'a',
+                        desc: 'Id del Artist',
+                        default: '-1'
+                    },
+                    genres: {
+                        demand: false,
+                        alias: 'g',
+                        desc: 'Generos de Tracks. \nCada genero debe estar separado por coma',
+                        default: ''
                     }
                 })
                 .example("$0 getTrack")
-                .example("$0 deleteArtist --name 'test'")
+                .example("$0 deleteTrack --id 0")
                 .command('searchByName', 'Busca y devuelve los artistas, albums, tracks y playlists que coincidan con el nombre pasado. Permite búsqueda parcial ', {
                     name: {
                         demand: false,
