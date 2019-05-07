@@ -16,8 +16,7 @@ Dentro de las dependencias se instalan:
 * mocha (para testing)
 * yargs (para ingreso de comandos en consola)
 
-El proyecto se configuro para que pueda correr los archivos .ts sin necesidad de compilarlos a .js (si es necesario, se realizarán 
-los scripts necesarios para la compilación)  
+El proyecto se configuro para que pueda correr los archivos .ts sin necesidad de compilarlos a .js (si existe la necesidad de  compilarlos a archivos .js, se realizarán los scripts para estos)  
 
 **Uso de UNQfy**  
 Para ejecutar el main debemos ingresar `ts-node <dir main.ts>` junto a los comandos a ejecutar. En nuestro caso, se encuentra en `src/main`  
