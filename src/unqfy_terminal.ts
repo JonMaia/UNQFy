@@ -91,8 +91,8 @@ export class UNQfyTerminal {
     }
 
     public static findPlaylistByName(unqfy: UNQfy, name: any) {
-        let playlist = unqfy.getPlaylistByName(name);
-        if(playlist !== undefined) {
+        let playlist = unqfy.getPlaylistByPartialName(name);
+        if(playlist.length > 0) {
             console.log(playlist);
         } else {
             console.log(`No se encontro el playlist que corresponda con '${name}'`);
@@ -110,7 +110,7 @@ export class UNQfyTerminal {
 
     private static createPlaylist(unqfy: UNQfy, argv: any) {
         let name = argv.name;
-        let genres = argv.genres;
+        let genres = argv.genres.split(",");
         let duration = argv.duration;
         try {
             let playlist = unqfy.createPlaylist(name, genres, duration);

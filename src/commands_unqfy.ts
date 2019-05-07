@@ -151,22 +151,19 @@ export const {argv} = require('yargs')
                 .example("$0 deleteTrack --id 0")
                 .command('createPlaylist', 'Crea un playlist con los generos dados y una duracion maxima', {
                     name: {
-                        demand: false,
+                        demand: true,
                         alias: 'n',
                         desc: 'Nombre parcial o completo del playlist',
-                        default: ''
                     },
                     duration: {
-                        demand: false,
+                        demand: true,
                         alias: 'd',
                         desc: 'Duracion maxima que tiene el playlist',
-                        default: '-1'
                     },
                     genres: {
-                        demand: false,
+                        demand: true,
                         alias: 'g',
                         desc: 'Generos que contiene el playlist. \nCada genero debe estar separado por coma',
-                        default: ''
                     }
                 })
                 .example("$0 createPlaylist --name 'Metal del bueno' --duration 900 --genres ['Metal', 'Rock']")
@@ -176,6 +173,12 @@ export const {argv} = require('yargs')
                         alias: 'i',
                         desc: 'Id del playlist buscado',
                         default: '-1'
+                    },
+                    name: {
+                        demand: false,
+                        alias: 'n',
+                        desc: 'Nombre del playlist. Incluye búsqueda parcial',
+                        default: ''
                     }
                 })
                 .example("$0 getPlaylist --id 3")
