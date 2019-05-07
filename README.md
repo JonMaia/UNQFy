@@ -1,6 +1,9 @@
 # UnqFy
 WebServices / UnqFy
   
+**UML**  
+![uml](https://github.com/Ariel20395/UnqFy/blob/master/UnqFy.png)
+  
 **Instalación**  
 Ingresar en consola  
 ```bash
@@ -26,7 +29,10 @@ Para ver los comandos disponibles ingresar en la consola
 ```bash
 ts-node src/main --help
 ```  
-Si queremos cargar pre-cargar datos podemos usar el script build, este ejecutará todos los comandos para cargar artistas, albumes, tracks y playlist guardados en el archivo `datos.sh`.  
+***Nota:*** para poder utilizar los comandos de consola `ts-node` y `typescript` deben ser instalados globalmente, para esto 
+debemos ingresar en consola `npm install -g typescript ts-node`
+  
+Si queremos pre-cargar datos podemos usar el script build, este ejecutará todos los comandos para cargar artistas, albumes, tracks y playlist guardados en el archivo `datos.sh`.  
 Para poder usar correctamente el build, primero debemos darle permisos a `datos.sh`
 ```bash
 chmod +x datos.sh
