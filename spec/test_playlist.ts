@@ -28,6 +28,9 @@ describe('Test administrador de tracks', () => {
     let unqfy: UNQfy;
     let genres: Array<string>;
     let track: Track;
+    let track2: Track;
+    let track3: Track;
+    let track4: Track;
     let album: Album;
     let artist: Artist;
     let playlist: Playlist;
@@ -38,29 +41,19 @@ describe('Test administrador de tracks', () => {
         artist = createArtist(unqfy, 'Iron Maiden', 'Reino Unido');
         album = createAndAddAlbum(unqfy, artist.id, 'The Book of Souls', 2015);
         track = createTrack(unqfy, album.id, 'If Eternity Should Fail', 200, genres);
-        playlist = createPlaylist(unqfy, 'Metal del bueno', ['Metal'], 400);
-    })
-
-    it('Creación de track', () => {
-        assert.equal(track.name, 'If Eternity Should Fail');
-        assert.equal(track.duration, 200);
-        assert.equal(track.genres, genres);
+        track2 = createTrack(unqfy, album.id, 'The Book of Souls', 200, genres);
+        track3 = createTrack(unqfy, album.id, 'Empire of the Clouds', 200, genres);
+        track4 = createTrack(unqfy, album.id, 'Speed of Light', 200, genres)
+        playlist = createPlaylist(unqfy, 'Metal del bueno', ['Metal'], 700);
     });
 
-    it('Un track que contiene el genero Metal', () => {
-        let tracks = unqfy.getTracksMatchingGenres(['Metal']);
-        tracks.push(track);
-        assert.notEqual(tracks, undefined);
-        if(tracks !== undefined){
-            assert.equal(tracks[0].id, track.id);
-        }
-    });
-
-    it('Al eliminar un track tambien se borra del playlist', () => {
-        assert.isTrue(unqfy.existsTrack(track.id));
+    it('Creación del playlist', () => {
+        assert.equal(playlist.name, 'Metal del bueno');
+        assert.equal(playlist.duration(), 700);
+        assert.equal(playlist.genres, genres);
         assert.isTrue(playlist.hasTrack(track));
-        unqfy.deleteTrack(track.id);
-        assert.isFalse(unqfy.existsTrack(track.id));
-        assert.isFalse(playlist.hasTrack(track));
-    })
-});
+        assert.isTrue(playlist.hasTrack(track2));
+        assert.isTrue(playlist.hasTrack(track3));
+        assert.isTrue(playlist.hasTrack(track4));
+    });
+});    

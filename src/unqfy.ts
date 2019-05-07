@@ -222,7 +222,7 @@ export class UNQfy {
         if(album !== undefined) {
             album.deleteTrack(track);
         }
-        this.deleteTrackInPlayLists(track);
+        this.deleteTrackInPlaylists(track);
         this.tracks.splice(this.tracks.indexOf(track), 1);
     }
 
@@ -290,6 +290,10 @@ export class UNQfy {
         return this.tracks.some(track => track.id === idTrack);
     }
 
+    public existsPlaylist(playlistid: number): boolean {
+        return this.playLists.some(playlist => playlist.id === playlistid);
+    }
+
     private filterAlbumsByArtistId(idArtist: number): Array<Album> | undefined {
         return this.albumes.filter(album => album.idArtist === idArtist);
     }
@@ -344,9 +348,11 @@ export class UNQfy {
         return this.playLists.filter(playlist => playlist.name.includes(name));
     }
 
-    public deleteTrackInPlayLists(track: Track){
+    public deleteTrackInPlaylists(track: Track){
         this.playLists.forEach(playlist => {
-            playlist.tracks.splice(1,1,track);
+            if(playlist.hasTrack(track)){
+                playlist.deleteTrackInPlayLists(track);
+            }
         })
     }
 

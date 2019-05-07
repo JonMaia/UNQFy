@@ -34,4 +34,8 @@ export class Playlist {
         }, 0);
     }
 
+    public deleteTrackInPlayLists(track: Track){
+        this.tracks.splice(this.tracks.indexOf(track), 1);
+    }
+
 }

@@ -53,7 +53,7 @@ export class UNQfyTerminal {
         }
     }
 
-    static createPlaylist(unqfy: UNQfy, argv: any) {
+    private static createPlaylist(unqfy: UNQfy, argv: any) {
         let name = argv.name;
         let genres = argv.genres;
         let duration = argv.duration;
