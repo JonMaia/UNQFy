@@ -43,10 +43,25 @@ export class UNQfyTerminal {
             case 'searchByName':
                 this.searchByName(unqfy, argv);
                 break;
+            
+            case 'createPlaylist':
+                this.createPlaylist(unqfy, argv);
 
             default:
                 console.log('Operación desconocida.');
                 console.log('--help     para ver los comandos')
+        }
+    }
+
+    static createPlaylist(unqfy: UNQfy, argv: any) {
+        let name = argv.name;
+        let genresToInclude = argv.genresToInclude;
+        let maxDuration = argv.maxDuration;
+        try {
+            let playlist = unqfy.createPlaylist(name, genresToInclude, maxDuration);
+            console.log(playlist);
+        } catch(e) {
+            console.log(`Error: ${e.message}`);
         }
     }
 

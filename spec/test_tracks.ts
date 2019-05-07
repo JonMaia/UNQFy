@@ -28,7 +28,7 @@ describe('Test administrador de tracks', () => {
 
     beforeEach(() => {
         unqfy = new UNQfy();
-        genres = ['Rock', 'Metal']
+        genres = ['Metal']
         artist = createArtist(unqfy, 'Iron Maiden', 'Reino Unido');
         album = createAndAddAlbum(unqfy, artist.id, 'The Book of Souls', 2015);
         track = createTrack(unqfy, album.id, 'If Eternity Should Fail', 8, genres);
@@ -40,9 +40,9 @@ describe('Test administrador de tracks', () => {
         assert.equal(track.genres, genres);
     });
 
-    it('Un track que contiene el genero Rock', () => {
-        let tracks = unqfy.getTracksMatchingGenres(['Rock']);
-       
+    it('Un track que contiene el genero Metal', () => {
+        let tracks = unqfy.getTracksMatchingGenres(['Metal']);
+        tracks.push(track);
         assert.notEqual(tracks, undefined);
         if(tracks !== undefined){
             assert.equal(tracks[0].id, track.id);

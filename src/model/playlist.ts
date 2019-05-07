@@ -5,17 +5,17 @@ export class Playlist {
     public id: number = 0;
     public tracks: Array<Track> = [];
     public name: string;
-    public duration: number;
+    public maxDuration: number;
     public genres: Array<string>;
 
-    constructor(name: string, duration: number, genres: Array<string>) {
+    constructor(name: string, maxDuration: number, genres: Array<string>) {
         this.genres = genres;
         this.name = name;
-        this.duration = duration;
+        this.maxDuration = maxDuration;
     }
 
-    public getDuration(): number {
-        return this.duration;
+    public duration(): number {
+        return this.maxDuration;
     }
 
     public hasTrack(track: Track) {
@@ -23,8 +23,9 @@ export class Playlist {
     }
 
     public addTrackPL(track: Track) {
-        if (this.duration + track.duration < )
+        if (this.durationTracks() + track.duration <= this.maxDuration && track.containsGenre(this.genres)){
             this.tracks.push(track);
+        }    
     }
 
     public durationTracks(): number {

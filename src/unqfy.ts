@@ -264,11 +264,7 @@ export class UNQfy {
     // retorna: los tracks que contenga alguno de los generos en el parametro genres
     public getTracksMatchingGenres(genres: Array<string>): Array<Track> {
         return this.tracks.filter((track) => {    
-            if(track.containsGenre(genres)) {
-                return track;
-            } else {
-                return new Array;
-            }
+            return track.containsGenre(genres);
         })
     }
 
@@ -307,21 +303,16 @@ export class UNQfy {
         * un metodo hasTrack(aTrack) que retorna true si aTrack se encuentra en la playlist.
     */
         let playList = this.getPlaylistByName(name);
-        let newPlayList = new Playlist(name, maxDuration, genresToInclude);
-        newPlayList.id = this.getNextPlayListId();
-        let tracks: Array<Track> = [];
         if (playList === undefined) {
+            let newPlayList = new Playlist(name, maxDuration, genresToInclude);
+            newPlayList.id = this.getNextPlayListId();
             this.tracks.forEach(track => {
-                if(newPlayList.getDuration() + track.duration < maxDuration && track.getGenres === genresToInclude ) {
-                    tracks.push(track);
-                    newPlayList.duration += track.duration;
-                }
+                newPlayList.addTrackPL(track);
             })  
+            return newPlayList;
         } else {
             throw new Error('El playlist que se intenta crear ya existe')
         }
-        newPlayList.tracks.concat(tracks);
-        return newPlayList;
     }
 
     public getNextPlayListId(): number {
@@ -354,10 +345,12 @@ export class UNQfy {
         let artists = this.filterArtistsByName(name);
         let albums = this.filterAlbumByName(name);
         let tracks = this.getTrackByNamePartial(name);
+        let playList = this.getPlaylistByName(name);
         return {
             artists,
             albums,
-            tracks
+            tracks,
+            playList
         }
     }
 
