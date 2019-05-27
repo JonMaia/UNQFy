@@ -227,9 +227,9 @@ export class UNQfyTerminal {
     }
 
     private static findAlbumByArtistId(unqfy: UNQfy, id: number) {
-        let albums = unqfy.getAlbumsByArtistId(id);
-        if(albums.length > 0) {
-            console.log(albums);
+        let artist = unqfy.getArtistById(id);
+        if(artist !== undefined && artist.albums.length > 0) {
+            console.log(artist.albums);
         } else {
             console.log(`No se encontro album con Artist Id: ${id}`);
         }

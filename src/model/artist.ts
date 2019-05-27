@@ -19,7 +19,11 @@ export class Artist {
     }
 
     public addAlbum(album: Album): void {
-        this.albums.push(album);
+        if(!this.hasAlbum(album.name)) {
+            this.albums.push(album);
+        } else {
+            throw new Error(`El album '${album.name}' del artista '${this.name}' ya a sido creado`);
+        }
     }
 
     public deleteAlbum(album: Album): void {
