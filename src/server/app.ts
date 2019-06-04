@@ -1,6 +1,8 @@
 import express, {Application} from 'express';
 import { Server } from 'http';
 
+import AlbumRoutes from '../routes/album_routes';
+
 export class App {
 
     private app: Application;
@@ -22,7 +24,7 @@ export class App {
     }
 
     private routes() {
-        
+        this.app.use('/api', AlbumRoutes);
     }
 
     public start(): void {
