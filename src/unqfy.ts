@@ -12,7 +12,6 @@ export class UNQfy {
     
     private listeners: any;
     private artists: Array<Artist>;
-    private tracks: Array<Track>;
     private artistId: number = 0;
     private trackID: number = 0;
     private albumID: number = 0;
@@ -21,7 +20,6 @@ export class UNQfy {
 
     constructor() {
         this.artists = new Array;
-        this.tracks = new Array;
         this.playLists = new Array;
     }
 
@@ -178,7 +176,6 @@ export class UNQfy {
             if(!album.hasTrack(trackData.name)) {
                 let newTrack = new Track(trackData.name, trackData.duration, trackData.genres, albumId);
                 newTrack.id = this.getNextTrackId();
-                this.tracks.push(newTrack);
                 album.addTrack(newTrack);
                 return newTrack;
             } else {
@@ -202,15 +199,15 @@ export class UNQfy {
             album.deleteTrack(track);
         }
         this.deleteTrackInPlaylists(track);
-        this.tracks.splice(this.tracks.indexOf(track), 1);
     }
 
     public getTrackByName(name: string) {
-        return this.tracks.find(track => track.name === name);
+        this.getAllTracks()
+        return this.getAllTracks().find(track => track.name === name);
     }
 
     public getTrackByPartialName(name: string): Array<Track> {
-        return this.tracks.filter(track => track.name.includes(name));
+        return this.getAllTracks().filter(track => track.name.includes(name));
     }
 
     public getNextTrackId() : number {
@@ -238,7 +235,7 @@ export class UNQfy {
     }
 
     public getTrackById(id: number): Track | undefined {
-        return this.tracks.find(track => track.id === id);
+        return this.getAllTracks().find(track => track.id === id);
     }
 
     public getPlaylistById(id: number): Playlist | undefined{
@@ -248,7 +245,7 @@ export class UNQfy {
     // genres: array de generos(strings)
     // retorna: los tracks que contenga alguno de los generos en el parametro genres
     public getTracksMatchingGenres(genres: Array<string>): Array<Track> {
-        return this.tracks.filter((track) => {    
+        return this.getAllTracks().filter((track) => {    
             return track.containsGenre(genres);
         })
     }
@@ -307,7 +304,7 @@ export class UNQfy {
         if (playList === undefined) {
             let newPlayList = new Playlist(name, maxDuration, genresToInclude);
             newPlayList.id = this.getNextPlayListId();
-            this.tracks.forEach(track => {
+            this.getAllTracks().forEach(track => {
                 newPlayList.addTrackPL(track);
             });
             this.playLists.push(newPlayList);
