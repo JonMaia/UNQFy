@@ -65,3 +65,5 @@ dist/
 
 data.json
 .vscode/
+
+spotifyCreds.json
