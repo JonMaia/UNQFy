@@ -1,6 +1,8 @@
 import { UNQfy } from "../../unqfy";
 import fs from "fs";
 import path from "path";
+import { Response } from "express";
+import { ErrorResponse } from "../error_response/error_response";
 
 export class UNQfyController {
  
@@ -19,5 +21,12 @@ export class UNQfyController {
     protected static saveUnqfy(unqfy: UNQfy) {
         let filename = path.join(__dirname, '..', '..', 'data.json');
         unqfy.save(filename);
+    }
+
+    protected static handleError(res: Response, error: ErrorResponse): Response {
+        return res.status(error.status).json({
+            status: error.status,
+            errorCode: error.message
+        })
     }
 }

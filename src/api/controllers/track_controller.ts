@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { UNQfyController } from "./unqfy_controller";
 import { Track } from "../../model/track";
+import { ResourceNotFoundResponse } from "../error_response/resource_not_found_response";
 
 export class TrackController extends UNQfyController {
 
@@ -10,10 +11,7 @@ export class TrackController extends UNQfyController {
         if(track !== undefined) {
             return res.json(track);
         } else {
-            return res.status(404).json({
-                status: 404,
-                errorCode: "RESOURCE_NOT_FOUND"
-            })
+            return this.handleError(res, new ResourceNotFoundResponse());
         }
     }
 }
