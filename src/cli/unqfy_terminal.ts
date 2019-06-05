@@ -1,4 +1,4 @@
-import {UNQfy} from './unqfy';
+import {UNQfy} from '../unqfy';
 
 export class UNQfyTerminal {
 

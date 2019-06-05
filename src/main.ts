@@ -1,7 +1,7 @@
 import fs from 'fs'; // necesitado para guardar/cargar unqfy
-import {argv} from './commands_unqfy';
+import {argv} from './cli/commands_unqfy';
 import {UNQfy} from './unqfy'; // importamos el modulo unqfy
-import {UNQfyTerminal} from './unqfy_terminal';
+import {UNQfyTerminal} from './cli/unqfy_terminal';
 
 class Main {
     // Retorna una instancia de UNQfy. Si existe filename, recupera la instancia desde el archivo.

@@ -1,4 +1,4 @@
-import {App} from './server/app';
+import {App} from './api/server/app';
 
 function main() {
     const app = new App(3000);
