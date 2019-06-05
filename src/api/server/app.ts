@@ -2,6 +2,7 @@ import express, {Application} from 'express';
 import { Server } from 'http';
 
 import AlbumRoutes from '../routes/album_routes';
+import TrackRoutes from '../routes/track_routes';
 
 export class App {
 
@@ -25,6 +26,7 @@ export class App {
 
     private routes() {
         this.app.use('/api', AlbumRoutes);
+        this.app.use('/api', TrackRoutes);
     }
 
     public start(): void {

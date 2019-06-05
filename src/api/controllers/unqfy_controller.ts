@@ -1,12 +1,14 @@
-import { UNQfy } from "../unqfy";
-import fs from "fs"
+import { UNQfy } from "../../unqfy";
+import fs from "fs";
+import path from "path";
 
 export class UNQfyController {
  
     private static unqfy: UNQfy;
 
-    protected static getUnqfy(filename = 'data.json'){
-        if(!this.unqfy && fs.existsSync(filename)){
+    protected static getUnqfy(){
+        let filename = path.join(__dirname, '..', '..', '..', 'data.json');
+        if(this.unqfy === undefined && fs.existsSync(filename)){
             this.unqfy = UNQfy.load(filename);
         } else {
             this.unqfy = new UNQfy();
@@ -14,7 +16,8 @@ export class UNQfyController {
         return this.unqfy;
     }
 
-    protected static saveUnqfy(unqfy: UNQfy, filename = 'data.json'){
+    protected static saveUnqfy(unqfy: UNQfy) {
+        let filename = path.join(__dirname, '..', '..', 'data.json');
         unqfy.save(filename);
     }
 }
