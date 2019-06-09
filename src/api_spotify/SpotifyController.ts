@@ -1,6 +1,7 @@
 import { SpotifyAuth } from "./SpotifyAuth";
 import { Request, Response } from "express";
 import rp from 'request-promise';
+import { ArtistSpotify } from "./artist_spotify";
 
 export class SpotifyController {
 
@@ -38,15 +39,5 @@ export class SpotifyController {
             .catch(err => {
                 return res.status(400).json({ error: 'Ha ocurrido un error al obtener los datos. Por favor, intente de nuevo'});
             })
-    }
-}
-
-class ArtistSpotify {
-    public artist: string;
-    public id: string;
-
-    constructor(artist: string, id: string) {
-        this.artist = artist;
-        this.id = id;
     }
 }

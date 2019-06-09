@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from 'path';
-import { auth } from '../generateSpotifyCredentials';
+import { auth } from './generateSpotifyCredentials';
 
 export class SpotifyAuth {
 
@@ -17,11 +17,10 @@ export class SpotifyAuth {
             if(elapsedTime > 60) {
                 throw new Error('Token invalido');
             }
-            //console.log(`Tiempo transcurrido desde que se pidio el token: ${elapsedTime}`);
             return `${spotifyCreds.token_type} ${spotifyCreds.access_token}`
         } catch(e) {
-            console.log('Se debe generar el archivo spotifyCreds.json');
-            console.log('Ingrese en consola: node src/generateSpotifyCredentials.js');
+            console.log("Se debe generar el archivo spotifyCreds.json");
+            console.log("Ingrese en consola: 'npm run auth_spotify'");
         }
     }
 
@@ -34,5 +33,3 @@ export class SpotifyAuth {
         return hours * 60 + minutes;
     }
 }
-
-// SpotifyAuth.authenticate();
