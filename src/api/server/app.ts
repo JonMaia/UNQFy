@@ -5,6 +5,7 @@ import IndexRoutes from  '../routes/index_route';
 import AlbumRoutes from  '../routes/album_routes';
 import ArtistRoutes from '../routes/artist_routes';
 import TrackRoutes from  '../routes/track_routes';
+import SpotifyRoutes from '../routes/spotify_routes';
 
 export class App {
 
@@ -31,6 +32,7 @@ export class App {
         this.app.use('/api', ArtistRoutes);
         this.app.use('/api', AlbumRoutes);
         this.app.use('/api', TrackRoutes);
+        this.app.use('/api', SpotifyRoutes)
     }
 
     public start(): void {

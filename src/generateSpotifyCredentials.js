@@ -10,6 +10,7 @@ const fs = require('fs');
 const express = require('express'); // Express web server framework
 const request = require('request'); // "Request" library
 const querystring = require('querystring');
+const opn = require('opn');
 
 const PORT = 3000;
 const CREDENTIALS_FILENAME = 'spotifyCreds.json';
@@ -54,6 +55,7 @@ function login() {
     });
   console.log('Ingrese a la siguiente URL e ingrese a su cuenta de spotify');
   console.log(url);
+  opn(url);
 }
 
 app.get('/spotify_cb', (req, res) => {
@@ -89,6 +91,7 @@ app.get('/spotify_cb', (req, res) => {
 
         const access_token = body.access_token;
         const refresh_token = body.refresh_token;
+        body.date_token = new Date().getTime();
 
         fs.writeFileSync(CREDENTIALS_FILENAME, JSON.stringify(
           body,
@@ -150,7 +153,10 @@ app.get('/refresh_token', (req, res) => {
   });
 });
 
-console.log(`Listening on ${PORT}`);
-server = app.listen(PORT);
+function auth() {
+  console.log(`Listening on ${PORT}`);
+  server = app.listen(PORT);
+  return login();
+}
 
-login();
+export { auth }
