@@ -31,9 +31,9 @@
   "scripts": {
     "prebuild": "rm -vf data.json",
     "build": "./datos.sh",
-    "test": "mocha -r ts-node/register spec/**/*.ts spec/*.ts",
+    "test": "NODE_ENV=DEV mocha -r ts-node/register spec/**/*.ts spec/*.ts",
     "eslint": "node_modules/.bin/eslint *.js",
-    "server_dev": "nodemon src/main_server.ts --exec ts-node",
+    "server_dev": "NODE_ENV=DEV nodemon src/main_server.ts --exec ts-node",
     "auth_spotify": "ts-node src/init_spotify_auth.ts"
   },
   "author": "grupo4",

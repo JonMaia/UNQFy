@@ -32,7 +32,9 @@ export class App {
         this.app.use('/api', ArtistRoutes);
         this.app.use('/api', AlbumRoutes);
         this.app.use('/api', TrackRoutes);
-        this.app.use('/api', SpotifyRoutes)
+        if(process.env.NODE_ENV === 'DEV') {
+            this.app.use('/api', SpotifyRoutes)
+        }
     }
 
     public start(): void {
