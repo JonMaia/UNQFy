@@ -1,6 +1,7 @@
 import { App } from '../../src/api/server/app';
 import chai, { assert } from 'chai';
 import chaiHttp = require('chai-http');
+import { MusixMatchService } from '../../src/api_musix_match/musix_match_service';
 
 let app: App;
 
