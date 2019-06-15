@@ -12,7 +12,7 @@ export class UNQfyController {
         let filename = path.join(__dirname, '..', '..', '..', 'data.json');
         if(this.unqfy === undefined && fs.existsSync(filename)){
             this.unqfy = UNQfy.load(filename);
-        } else {
+        } else if(this.unqfy === undefined) {
             this.unqfy = new UNQfy();
         }
         return this.unqfy;
