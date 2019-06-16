@@ -8,7 +8,7 @@ export class UNQfyController {
  
     private static unqfy: UNQfy;
 
-    protected static getUnqfy(){
+    protected static getUnqfy(): UNQfy{
         let filename = path.join(__dirname, '..', '..', '..', 'data.json');
         if(this.unqfy === undefined && fs.existsSync(filename)){
             this.unqfy = UNQfy.load(filename);
@@ -18,7 +18,7 @@ export class UNQfyController {
         return this.unqfy;
     }
 
-    protected static saveUnqfy(unqfy: UNQfy) {
+    protected static saveUnqfy(unqfy: UNQfy): void {
         let filename = path.join(__dirname, '..', '..', 'data.json');
         unqfy.save(filename);
     }

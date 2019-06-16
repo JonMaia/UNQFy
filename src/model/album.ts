@@ -23,11 +23,23 @@ export class Album {
         return this.tracks.some(track => track.name === trackName);
     }
 
+    public setYear(newYear: number): void {
+        this.year = newYear;
+    }
+
     public addTrack(track: Track): void {
         this.tracks.push(track);
     }
 
     public deleteTrack(track: Track): void {
         this.tracks.splice(this.tracks.indexOf(track), 1);
+    }
+
+    public toJson() {
+        return {
+            id: this.id,
+            name: this.name,
+            year: this.year
+        }
     }
 }

@@ -155,6 +155,14 @@ export class UNQfy {
         }
     }
 
+    public getAlbumByArtistId(name: string, artistId: number) {
+        return this.getAllAlbums().find(album => album.idArtist === artistId && album.name === name);
+    }
+
+    /*public actualizarAnioAlbum(albumId: number, newYear: number) {
+        this.getAllAlbums().map(album => album.id === albumId = album.setYear(newYear))
+    }*/
+
     /**
      * Retorna true si existe un album con el nombre pasado por parametro
      * @param name 
