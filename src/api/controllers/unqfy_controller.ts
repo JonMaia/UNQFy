@@ -23,7 +23,7 @@ export class UNQfyController {
         unqfy.save(filename);
     }
 
-    protected static handleError(res: Response, error: ErrorResponse): Response {
+    public static handleError(res: Response, error: ErrorResponse): Response {
         return res.status(error.status).json({
             status: error.status,
             errorCode: error.message

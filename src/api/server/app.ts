@@ -7,6 +7,8 @@ import ArtistRoutes from '../routes/artist_routes';
 import TrackRoutes from  '../routes/track_routes';
 import SpotifyRoutes from '../routes/spotify_routes';
 import MusixMatchRoutes from '../routes/musix_match_routes';
+import { ResourceNotFoundResponse } from '../error_response/resource_not_found_response';
+import { UNQfyController } from '../controllers/unqfy_controller';
 
 export class App {
 
@@ -37,6 +39,11 @@ export class App {
             this.app.use('/api', SpotifyRoutes);
             this.app.use('/api', MusixMatchRoutes);
         }
+        this.app.use((req, res, next) => {
+            if(!req.route) {
+                UNQfyController.handleError(res, new ResourceNotFoundResponse());
+            }
+        })
     }
 
     public start(): void {
