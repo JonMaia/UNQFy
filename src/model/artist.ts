@@ -1,7 +1,6 @@
 import { Album } from "./album";
 
 export class Artist {
-
     public id: number;
     public name: string;
     public country: string;
@@ -28,5 +27,13 @@ export class Artist {
 
     public deleteAlbum(album: Album): void {
         this.albums.splice(this.albums.indexOf(album), 1);
+    }
+    public toJson() {
+        return {
+            id: this.id,
+            name: this.name,
+            country: this.country,
+            albums : this.albums
+        }
     }
 }

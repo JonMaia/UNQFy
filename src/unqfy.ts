@@ -97,6 +97,14 @@ export class UNQfy {
         return this.artists.filter(artist => artist.name.includes(name));
     }
 
+
+    public updateArtist(artistId : number, artistName: string): Artist|undefined {
+        let albumUpdate = this.artists.find(artist => artist.id === artistId);
+        if(albumUpdate !== undefined) {
+            albumUpdate.name = artistName;
+        }
+            return albumUpdate;   
+    }
     /**
      * Crea un album, lo agrega a albumes y agrega agrega ese album al lista de albumes del artista correspondiente,  
      * salvo en caso que el album del artista (con el artistId especifico) ya exista, en ese caso lanza una excepcion

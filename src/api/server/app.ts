@@ -1,8 +1,10 @@
 import express, {Application} from 'express';
 import { Server } from 'http';
 
-import AlbumRoutes from '../routes/album_routes';
-import TrackRoutes from '../routes/track_routes';
+import IndexRoutes from  '../routes/index_route';
+import AlbumRoutes from  '../routes/album_routes';
+import ArtistRoutes from '../routes/artist_routes';
+import TrackRoutes from  '../routes/track_routes';
 
 export class App {
 
@@ -25,6 +27,8 @@ export class App {
     }
 
     private routes() {
+        this.app.use(IndexRoutes);
+        this.app.use('/api', ArtistRoutes);
         this.app.use('/api', AlbumRoutes);
         this.app.use('/api', TrackRoutes);
     }
