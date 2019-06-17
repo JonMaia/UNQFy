@@ -1,7 +1,7 @@
 import { App } from '../../src/api/server/app';
 import chai, { assert } from 'chai';
 import chaiHttp = require('chai-http');
-import { MusixMatchService } from '../../src/api_musix_match/musix_match_service';
+import { TrackMusixMatch } from '../../src/api_musix_match/track_musix_match';
 
 let app: App;
 
@@ -25,7 +25,7 @@ describe('Musix Match Controller', () => {
             .send({artist: 'El Kuelgue', track: 'En Avenidas'})
             .then(res => {
                 let tracks = res.body;
-                let tracksExpected = [{id: 35109730, name: 'En Avenidas'}]
+                let tracksExpected = [new TrackMusixMatch(35109730, 'En Avenidas')];
                 assert.equal(res.status, 200);
                 assert.equal(JSON.stringify(tracks), JSON.stringify(tracksExpected))
             }).catch(error => {

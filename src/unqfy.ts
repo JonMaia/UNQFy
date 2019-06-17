@@ -123,18 +123,6 @@ export class UNQfy {
     }
 
     /**
-     * Retorna si al artista con el idArtista tiene o no un album con el nombre nameAlbum
-     * @param nameAlbum 
-     * @param idArtist
-     */
-    private existAlbumToArtist(nameAlbum:string, idArtist:number): boolean{
-        let albumes = this.filterAlbumByName(nameAlbum)
-        .filter(alb => alb.idArtist === idArtist);
-
-        return albumes.length > 0;
-    }
-
-    /**
      * Retorna el siguiente id disponible para un album
      */
     public getNextAlbumId() : number {
@@ -373,6 +361,14 @@ export class UNQfy {
             tracks,
             playlists
         }
+    }
+
+    public getArtistByTrack(track: Track): Artist | undefined {
+        let album: Album | undefined = this.getAlbumById(track.album);
+        if(album !== undefined) {
+            return this.getArtistById(album.idArtist);
+        }
+        return undefined;
     }
 
     public save(filename: string) {

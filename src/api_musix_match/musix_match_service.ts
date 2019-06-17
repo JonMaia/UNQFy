@@ -1,11 +1,12 @@
 import rp from 'request-promise';
 import { ErrorResponse } from '../api/error_response/error_response';
+import { TrackMusixMatch } from './track_musix_match';
 
 export class MusixMatchService {
 
     private static readonly API_KEY: string = 'ccf4ee0d8f08795e824a621b3e03b7fe'; 
 
-    public static findTracks(artist: string, track: string) {
+    public static findTracks(artist: string, track: string): Promise<Array<TrackMusixMatch>> {
         let artistEncode: string = encodeURIComponent(artist);
         let trackEncode: string = encodeURIComponent(track);
         let options = {
@@ -14,15 +15,19 @@ export class MusixMatchService {
         }
         return rp(options)
             .then(data => {
+                let tracksMM: Array<TrackMusixMatch> = new Array;
                 if(data.message.header.status_code === 200) {
                     let trackList = data.message.body.track_list;
-                    return trackList.reduce((trackList: Array<any>, track: any) => {
+                    tracksMM = trackList.reduce((trackList: Array<TrackMusixMatch>, track: any) => {
                         let trackMM = track.track
-                        trackList.push({id: trackMM.track_id, name: trackMM.track_name});
+                        trackList.push(new TrackMusixMatch(trackMM.track_id,trackMM.track_name));
                         return trackList;
-                    }, []);
+                    }, tracksMM);
                 }
                 return new Promise((resolve, reject) => {
+                    if(tracksMM.length > 0) {
+                        resolve(tracksMM);
+                    }
                     reject(new ErrorResponse(data.message.header.status_code, 'Ha ocurrido un error'));
                 });
             })
@@ -33,21 +38,18 @@ export class MusixMatchService {
             });
     }
 
-    public static findLyricsByTrack(idTrack: number) {
+    public static findLyricsByTrack(idTrack: number): Promise<TrackMusixMatch> {
         let options = {
             uri: `http://api.musixmatch.com/ws/1.1/track.lyrics.get?apikey=${this.API_KEY}&track_id=${idTrack}`,
             json: true
         }
         return rp(options)
             .then(data => {
-                if(data.message.header.status_code === 200) {
-                    let lyrics = data.message.body.lyrics;
-                    return {
-                        id: idTrack,
-                        lyrics: lyrics.lyrics_body
-                    };
-                }
                 return new Promise((resolve, reject) => {
+                    if(data.message.header.status_code === 200) {
+                        let lyrics = data.message.body.lyrics;
+                        resolve(new TrackMusixMatch(idTrack, '', lyrics.lyrics_body));
+                    }
                     reject(new ErrorResponse(data.message.header.status_code, 'Ha ocurrido un error'));
                 });
             })
