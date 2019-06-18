@@ -12,8 +12,10 @@ router.route('/albums/:id')
 router.route('/albums/:id')
     .put(AlbumController.updateYearInAlbum.bind(AlbumController));
 
-    /*
 router.route('/:id')
-    .delete(AlbumController.deleteUser)
-*/
+    .delete(AlbumController.deleteAlbum.bind(AlbumController));
+
+router.route('/albums')
+    .get(AlbumController.getAlbumByName.bind(AlbumController));
+
 export default router;
