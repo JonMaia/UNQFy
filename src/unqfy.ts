@@ -19,10 +19,14 @@ export class UNQfy {
     private playListID: number = 0;
 
     constructor() {
-        this.artists = new Array;
+        this.artists = new Array<Artist>();
         this.playLists = new Array;
     }
 
+    public getArtists(): Array<Artist>{
+        //let res : Array<Artist> = new Array<Artist>();
+        return this.artists;
+    }
     /**
      * Crea un nuevo artista con los datos pasados por parametro, lo guarda y retorna.  
      * Previamente, verifica que no exista un artista con el nombre pasado por parametro, si existe el artista lanza un error.
@@ -97,11 +101,21 @@ export class UNQfy {
         return this.artists.filter(artist => artist.name.includes(name));
     }
 
+    /**
+     * Retorna una lista de artistas que coincidan, incluso parcialmente, con el nombre pasado por parametro
+     * @param name 
+     */
+    public filterArtistsByNameNoSensible(name: string): Array<Artist> {
+        return this.getArtists().filter(artist => (artist.name.toLowerCase().toString()).includes(name.toLowerCase().toString()));
+    }
 
-    public updateArtist(artistId : number, artistName: string): Artist|undefined {
+
+
+    public updateArtist(artistId : number, artistName: string, artistCountry: string): Artist|undefined {
         let albumUpdate = this.artists.find(artist => artist.id === artistId);
         if(albumUpdate !== undefined) {
             albumUpdate.name = artistName;
+            albumUpdate.country = artistCountry;
         }
             return albumUpdate;   
     }

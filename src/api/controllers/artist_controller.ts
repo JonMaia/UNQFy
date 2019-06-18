@@ -4,29 +4,38 @@ import { Artist } from '../../model/artist';
 import { UNQfyController } from './unqfy_controller';
 import { ResourceNotFoundResponse } from '../error_response/resource_not_found_response';
 import { BadResquestResponse } from '../error_response/bad_resquest_response';
-
+import { ResourceAlreadyExists } from '../error_response/resource_already_exists';
 
 export class ArtistController extends UNQfyController{
 
     public static registerArtist(req: Request, res: Response): Response {
-        const artistBody: ArtistInterface = req.body;
-        let artist: Artist = this.getUnqfy().addArtist(artistBody);
-        return res.status(201).json({message: 'Artist creado', artist: artist.toJson()});   
+        const artistBody: ArtistInterface = req.body;   
+        if(!this.getUnqfy().existsArtist(artistBody.name)){
+            let artist: Artist = this.getUnqfy().addArtist(artistBody);
+            this.saveUnqfy;
+            return res.status(201).json({"id": artist.id, "name": artist.name, "country": artist.country, "albums": artist.albums});   
+        }else{
+            return this.handleError(res, new ResourceAlreadyExists());
+        }   
     }   
     public static validateData(req: Request, res: Response, next: NextFunction): void {
         this.validateJson(res, req.body);
         const artistBody: ArtistInterface = req.body;
-        this.validateDatas(res, artistBody);
-        next();
+        if (this.validateDatas(res, artistBody) == undefined){
+            next();
+        };     
     }
     private static validateJson(res: Response, artistBody: ArtistInterface): Response | undefined {
         if(!artistBody){
             return this.handleError(res, new BadResquestResponse());
         }
     }
-    private static validateDatas(res: Response, artistBody: ArtistInterface): void {
-        this.validateNameArtist(res, artistBody);
-        this.validateCountry(res, artistBody);
+    private static validateDatas(res: Response, artistBody: ArtistInterface): Response | undefined {
+        let nameValidate : Response | undefined = this.validateNameArtist(res, artistBody);
+        if(nameValidate == undefined){
+            return this.validateCountry(res, artistBody);
+        }
+        return nameValidate;
     }
     private static validateNameArtist(res: Response, artistBody: ArtistInterface): Response | undefined {
         if(!artistBody.name){
@@ -53,9 +62,10 @@ export class ArtistController extends UNQfyController{
         const artistBody: ArtistInterface = req.body;
         let artist: Artist | undefined = this.getUnqfy().getArtistById(artistId);
         if(artist !== undefined) {
-            let updateartist: Artist|undefined = this.getUnqfy().updateArtist(artistId,artistBody.name);   
+            let updateartist: Artist|undefined = this.getUnqfy().updateArtist(artistId,artistBody.name,artistBody.country);   
             if(updateartist !== undefined) {
-                return res.status(200).json({message: 'Artist actualizado', artist: updateartist.toJson()});
+                this.saveUnqfy;
+                return res.status(200).json({"id": artist.id, "name": artist.name, "country": artist.country, "albums": artist.albums}  );
             }else{
                 return this.handleError(res, new ResourceNotFoundResponse());
             }
@@ -75,21 +85,22 @@ export class ArtistController extends UNQfyController{
         let artist: Artist | undefined = this.getUnqfy().getArtistById(artistId);
         if(artist !== undefined) {
             this.getUnqfy().deleteArtist(artistId);
-            return res.status(204);
+            this.saveUnqfy;
+            return res.status(204).json();
         } else {
             return this.handleError(res, new ResourceNotFoundResponse());
         }
     }
 
     public static searchArtist(req: Request, res: Response): Response {
-      
-        const artistQuery: ArtistInterface = req.query;
-        let artists: Array<Artist> = this.getUnqfy().filterArtistsByName(artistQuery.name);
-        if(artists.length !== 0) {
-            return res.status(200).json({ artists: artists });
-        } else {
-            return this.handleError(res, new ResourceNotFoundResponse());
-        }
-    }
 
+         const artistQuery: ArtistInterface = req.query;
+        if(artistQuery.name == undefined){
+            let allArtist: Array<Artist> = this.getUnqfy().getArtists();
+            return res.status(200).json(allArtist);
+        }else{
+            let artists: Array<Artist> = this.getUnqfy().filterArtistsByNameNoSensible(artistQuery.name); 
+            return res.status(200).json(artists);
+        }
+      }
 }
