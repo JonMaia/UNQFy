@@ -3,7 +3,6 @@ import fs from "fs";
 import path from "path";
 import { Response } from "express";
 import { ErrorResponse } from "../error_response/error_response";
-import { AssertResponse } from "../assert_response/assert_response";
 
 export class UNQfyController {
  
@@ -28,13 +27,6 @@ export class UNQfyController {
         return res.status(error.status).json({
             status: error.status,
             errorCode: error.message
-        })
-    }
-
-    public static handleAssert(res: Response, assert: AssertResponse): Response {
-        return res.status(assert.status).json({
-            status: assert.status,
-            assert: assert.message
         })
     }
 }
