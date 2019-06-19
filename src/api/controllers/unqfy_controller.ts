@@ -14,13 +14,14 @@ export class UNQfyController {
             this.unqfy = UNQfy.load(filename);
         } else if(this.unqfy === undefined) {
             this.unqfy = new UNQfy();
+            this.saveUnqfy();
         }
         return this.unqfy;
     }
 
-    protected static saveUnqfy(unqfy: UNQfy): void {
-        let filename = path.join(__dirname, '..', '..', 'data.json');
-        unqfy.save(filename);
+    protected static saveUnqfy(): void {
+        let filename = path.join(__dirname, '..', '..', '..', 'data.json');
+        this.unqfy.save(filename);
     }
 
     public static handleError(res: Response, error: ErrorResponse): Response {

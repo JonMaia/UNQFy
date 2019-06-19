@@ -39,7 +39,8 @@ export class Album {
         return {
             id: this.id,
             name: this.name,
-            year: this.year
+            year: this.year,
+            tracks: this.tracks
         }
     }
 }

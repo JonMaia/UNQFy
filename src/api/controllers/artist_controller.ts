@@ -12,8 +12,10 @@ export class ArtistController extends UNQfyController{
         const artistBody: ArtistInterface = req.body;   
         if(!this.getUnqfy().existsArtist(artistBody.name)){
             let artist: Artist = this.getUnqfy().addArtist(artistBody);
-            this.saveUnqfy;
-            return res.status(201).json({"id": artist.id, "name": artist.name, "country": artist.country, "albums": artist.albums});   
+            console.log('-----------------------Post Artist--------------------------------')
+            console.log(this.getUnqfy())
+            this.saveUnqfy();
+            return res.status(201).json(artist.toJson());
         }else{
             return this.handleError(res, new ResourceAlreadyExists());
         }   
@@ -64,8 +66,8 @@ export class ArtistController extends UNQfyController{
         if(artist !== undefined) {
             let updateartist: Artist|undefined = this.getUnqfy().updateArtist(artistId,artistBody.name,artistBody.country);   
             if(updateartist !== undefined) {
-                this.saveUnqfy;
-                return res.status(200).json({"id": artist.id, "name": artist.name, "country": artist.country, "albums": artist.albums}  );
+                this.saveUnqfy();
+                return res.status(200).json(artist.toJson());
             }else{
                 return this.handleError(res, new ResourceNotFoundResponse());
             }
@@ -85,7 +87,7 @@ export class ArtistController extends UNQfyController{
         let artist: Artist | undefined = this.getUnqfy().getArtistById(artistId);
         if(artist !== undefined) {
             this.getUnqfy().deleteArtist(artistId);
-            this.saveUnqfy;
+            this.saveUnqfy();
             return res.status(204).json();
         } else {
             return this.handleError(res, new ResourceNotFoundResponse());
@@ -96,7 +98,7 @@ export class ArtistController extends UNQfyController{
 
          const artistQuery: ArtistInterface = req.query;
         if(artistQuery.name == undefined){
-            let allArtist: Array<Artist> = this.getUnqfy().getArtists();
+            let allArtist: Array<Artist> = this.getUnqfy().getAllArtists();
             return res.status(200).json(allArtist);
         }else{
             let artists: Array<Artist> = this.getUnqfy().filterArtistsByNameNoSensible(artistQuery.name); 

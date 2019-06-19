@@ -21,36 +21,12 @@ export class AlbumController extends UNQfyController{
         }
     }
 
-    public static validateData(req: Request, res: Response, next: NextFunction): void {
-        this.validateJson(res, req.body);
+    public static validateData(req: Request, res: Response, next: NextFunction) {
         const albumBody: AlbumInterface = req.body;
-        this.validateDatas(res, albumBody);
-        next();
-    }
-
-    private static validateJson(res: Response, albumBody: AlbumInterface): Response | undefined {
-        if(!albumBody){
-            return this.handleError(res, new BadResquestResponse());
-            // Por si se envia un json invalido
-        }
-    }
-
-    private static validateDatas(res: Response, albumBody: AlbumInterface): void {
-        this.validateArtistId(res, albumBody);
-        this.validateNameAlbum(res, albumBody);
-        this.validateYearAlbum(res, albumBody);
-    }
-
-    private static validateArtistId(res: Response, albumBody: AlbumInterface): Response | undefined {
-        if(!albumBody.artistId){
-            return this.handleError(res, new BadResquestResponse());
-        }
-    }
-
-    private static validateNameAlbum(res: Response, albumBody: AlbumInterface): Response | undefined {
-        if(!albumBody.name){
+        if(!albumBody || !albumBody.year || !albumBody.artistId || !albumBody.name) {
             return this.handleError(res, new BadResquestResponse()); 
         }
+        next();
     }
 
     public static validateYearAlbum(res: Response, albumBody: AlbumInterface): Response | undefined {
@@ -66,25 +42,25 @@ export class AlbumController extends UNQfyController{
         let artist: Artist | undefined = this.getUnqfy().getArtistById(albumByArtistId);
         if(!artist){
             return this.handleError(res, new RelatedResourceNotFound());
-        }
-        let newAlbum: Album | undefined = this.getUnqfy().getAlbumByArtistId(name, albumByArtistId);
-        if(newAlbum === undefined) {
-            let album: Album = this.getUnqfy().addAlbum(albumBody);
-            this.saveUnqfy; 
-            return res.status(201).json(album.toJson());
         } else {
-            return this.handleError(res, new ResourceAlreadyExists());
+            let newAlbum: Album | undefined = this.getUnqfy().getAlbumByArtistId(name, albumByArtistId);
+            if(newAlbum === undefined) {
+                let album: Album = this.getUnqfy().addAlbum(albumBody);
+                this.saveUnqfy(); 
+                return res.status(201).json(album.toJson());
+            } else {
+                return this.handleError(res, new ResourceAlreadyExists());
+            }
         }
     }
 
     public static updateYearInAlbum(req: Request, res: Response): Response | undefined {
-        this.validateJson(res, req.body);
         const albumYear: number = Number(req.body.year);
         const albumId: number = Number(req.params.id);
         let album: Album | undefined = this.getUnqfy().getAlbumById(albumId);
         if(album !== undefined) {
             album.setYear(albumYear);
-            this.saveUnqfy;
+            this.saveUnqfy();
             return res.status(200).json(album.toJson());
         } else {
             return this.handleError(res, new ResourceNotFoundResponse());
@@ -96,7 +72,7 @@ export class AlbumController extends UNQfyController{
         let album: Album | undefined = this.getUnqfy().getAlbumById(albumId);
         if(album !== undefined) {
             this.getUnqfy().deleteAlbum(album.id);
-            this.saveUnqfy;
+            this.saveUnqfy();
             return res.status(204).json();
         } else {
             return this.handleError(res, new ResourceNotFoundResponse());

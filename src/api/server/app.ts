@@ -1,5 +1,6 @@
 import express, {Application} from 'express';
 import { Server } from 'http';
+import morgan from 'morgan';
 
 import IndexRoutes from  '../routes/index_route';
 import AlbumRoutes from  '../routes/album_routes';
@@ -28,6 +29,9 @@ export class App {
 
     private middlewars() {
         this.app.use(express.json());
+        if(process.env.NODE_ENV === 'DEV') {
+            this.app.use(morgan('dev'));
+        }
     }
 
     private routes() {

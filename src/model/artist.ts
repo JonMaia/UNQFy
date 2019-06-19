@@ -10,7 +10,7 @@ export class Artist {
         this.name = name;
         this.country = country;
         this.id = 0;
-        this.albums = new Array;
+        this.albums = new Array();
     }
 
     public hasAlbum(albumName: string): boolean {

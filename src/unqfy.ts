@@ -7,26 +7,25 @@ import { Track } from './model/track';
 import {TrackInterface} from './model/interfaces';
 import { Playlist } from './model/playlist';
 
-// COMPLETAR POR EL ALUMNO: exportar todas las clases que necesiten ser utilizadas desde un modulo cliente
 export class UNQfy {
     
     private listeners: any;
     private artists: Array<Artist>;
-    private artistId: number = 0;
-    private trackID: number = 0;
-    private albumID: number = 0;
+    private artistId: number = 1;
+    private trackID: number = 1;
+    private albumID: number = 1;
     private playLists: Array<Playlist>;
-    private playListID: number = 0;
+    private playListID: number = 1;
 
     constructor() {
-        this.artists = new Array<Artist>();
-        this.playLists = new Array;
+        this.artists = new Array();
+        this.playLists = new Array();
     }
 
-    public getArtists(): Array<Artist>{
-        //let res : Array<Artist> = new Array<Artist>();
+    public getAllArtists(): Array<Artist>{
         return this.artists;
     }
+
     /**
      * Crea un nuevo artista con los datos pasados por parametro, lo guarda y retorna.  
      * Previamente, verifica que no exista un artista con el nombre pasado por parametro, si existe el artista lanza un error.
@@ -106,10 +105,8 @@ export class UNQfy {
      * @param name 
      */
     public filterArtistsByNameNoSensible(name: string): Array<Artist> {
-        return this.getArtists().filter(artist => (artist.name.toLowerCase().toString()).includes(name.toLowerCase().toString()));
+        return this.artists.filter(artist => (artist.name.toLowerCase()).includes(name.toLowerCase()));
     }
-
-
 
     public updateArtist(artistId : number, artistName: string, artistCountry: string): Artist|undefined {
         let albumUpdate = this.artists.find(artist => artist.id === artistId);
@@ -237,7 +234,7 @@ export class UNQfy {
     public getAllAlbums(): Array<Album> {
         return this.artists.reduce((albums: Array<Album>, artist: Artist) => {
             return albums.concat(artist.albums);
-        }, new Array)
+        }, new Array())
     }
 
     public getArtistById(id: number): Artist | undefined {
@@ -275,7 +272,7 @@ export class UNQfy {
                 return listTracks.concat(album.tracks);
             }, []);
         }
-        return new Array;
+        return new Array();
     }
 
     public existsTrack(idTrack: number): boolean {
@@ -285,7 +282,7 @@ export class UNQfy {
     private getAllTracks(): Array<Track> {
         return this.getAllAlbums().reduce((tracks: Array<Track>, album: Album) => {
             return tracks.concat(album.tracks);
-        }, new Array)
+        }, new Array())
     }
 
     public existsPlaylist(playlistid: number): boolean {
