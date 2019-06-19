@@ -20,7 +20,7 @@ export class AlbumController extends UNQfyController{
         const albumId: number = Number(req.params.id);
         let album: Album | undefined = this.getUnqfy().getAlbumById(albumId);
         if(album !== undefined) {
-            return this.handleAssert(res, new AlbumByIdResponse(album));
+            return res.status(200).json({message: 'Se a encontrado el album', album: album.toJson()});
         } else {
             return this.handleError(res, new ResourceNotFoundResponse());
         }
@@ -76,7 +76,7 @@ export class AlbumController extends UNQfyController{
         if(newAlbum === undefined) {
             let album: Album = this.getUnqfy().addAlbum(albumBody);
             this.saveUnqfy; 
-            return this.handleAssert(res, new AddAlbumToUnqfyResponse(album));
+            return res.status(201).json({message: 'Se agregó el album', album: album.toJson()});
         } else {
             return this.handleError(res, new ResourceAlreadyExists());
         }
@@ -90,7 +90,7 @@ export class AlbumController extends UNQfyController{
         if(album !== undefined) {
             album.setYear(albumYear);
             this.saveUnqfy;
-            return this.handleAssert(res, new UpdateAlbumResponse(album));
+            return res.status(200).json({message: 'Se actualizó el año', album: album.toJson()});
         } else {
             return this.handleError(res, new ResourceNotFoundResponse());
         }
@@ -102,7 +102,7 @@ export class AlbumController extends UNQfyController{
         if(album !== undefined) {
             this.getUnqfy().deleteAlbum(album.id);
             this.saveUnqfy;
-            return this.handleAssert(res, new DeleteAlbumCorrectlyResponse());
+            return res.status(204).json({message: 'Se eliminó correctamente el album'});
         } else {
             return this.handleError(res, new ResourceNotFoundResponse());
         }
@@ -114,14 +114,12 @@ export class AlbumController extends UNQfyController{
         if(albumName === undefined){
             let allAlbums: Array<Album> | undefined = this.getUnqfy().getAllAlbums();
             if(allAlbums !== undefined) {
-                return this.handleAssert(res, new AlbumsByNameResponse(allAlbums));
-                //res.status(200).json({message: 'Los albumes son:', albumes: this.getUnqfy().getAllAlbums().forEach(album => album.toJson())});
+                return res.status(200).json({message: 'Los albumes son:', albumes: allAlbums.forEach(album => album.toJson())});
             } else {
                 return this.handleError(res, new ResourceNotFoundResponse());
             }
         } else {
-            return this.handleAssert(res, new AlbumsByNameResponse(albums));
-            //res.status(200).json({message: 'Los albumes son:', albumes: albums.forEach(album => album.toJson())});
+            return res.status(200).json({message: 'Los albumes son:', albumes: albums.forEach(album => album.toJson())});
         }
     }
 }
