@@ -12,7 +12,7 @@ router.route('/albums/:id')
 router.route('/albums/:id')
     .put(AlbumController.updateYearInAlbum.bind(AlbumController));
 
-router.route('/:id')
+router.route('/albums/:id')
     .delete(AlbumController.deleteAlbum.bind(AlbumController));
 
 router.route('/albums')
