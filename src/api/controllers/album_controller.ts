@@ -7,11 +7,6 @@ import { ResourceNotFoundResponse } from '../error_response/resource_not_found_r
 import { BadResquestResponse } from '../error_response/bad_resquest_response';
 import { ResourceAlreadyExists } from '../error_response/resource_already_exists';
 import { RelatedResourceNotFound } from '../error_response/related_resource_not_found';
-import { AlbumByIdResponse } from '../assert_response/album_by_id_response';
-import { AddAlbumToUnqfyResponse } from '../assert_response/add_album_to_unqfy_response';
-import { UpdateAlbumResponse } from '../assert_response/update_album_response';
-import { DeleteAlbumCorrectlyResponse } from '../assert_response/delete_album_correctly_response';
-import { AlbumsByNameResponse } from '../assert_response/albums_by_name_response';
 
 
 export class AlbumController extends UNQfyController{
