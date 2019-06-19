@@ -106,15 +106,6 @@ export class AlbumController extends UNQfyController{
     public static getAlbumByName(req: Request, res: Response): Response | undefined {
         const albumName: string = req.params.name;
         let albums: Array<Album> | undefined = this.getUnqfy().filterAlbumByName(albumName);
-        if(albumName === undefined){
-            let allAlbums: Array<Album> | undefined = this.getUnqfy().getAllAlbums();
-            if(allAlbums !== undefined) {
-                return res.status(200).json({message: 'Los albumes son:', albumes: allAlbums.forEach(album => album.toJson())});
-            } else {
-                return this.handleError(res, new ResourceNotFoundResponse());
-            }
-        } else {
-            return res.status(200).json({message: 'Los albumes son:', albumes: albums.forEach(album => album.toJson())});
-        }
+        return res.status(200).json({message: 'Los albumes son:', albumes: albums.map(album => album.toJson())});
     }
 }
