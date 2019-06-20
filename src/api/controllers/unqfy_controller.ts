@@ -43,4 +43,11 @@ export class UNQfyController {
         this.unqfy.save(filename);
     }
 
+    // Solo se permite el seteo de unqfy para el entorno dev
+    public setUnqfy(unqfy: UNQfy): void {
+        if(process.env.NODE_ENV === 'DEV') {
+            this.unqfy = unqfy;
+        }
+    }
+
 }

@@ -3,8 +3,29 @@ import { UNQfyController } from "./unqfy_controller";
 import { Track } from "../../model/track";
 import { ResourceNotFoundResponse } from "../error_response/resource_not_found_response";
 import { ErrorResponse } from "../error_response/error_response";
+import { Album } from "../../model/album";
+import { RelatedResourceNotFound } from "../error_response/related_resource_not_found";
+import { ResourceAlreadyExists } from "../error_response/resource_already_exists";
 
 export class TrackController {
+
+    public static addTrack(req: Request, res: Response) {
+        const trackReq = req.body;
+        let album: Album | undefined = UNQfyController.getInstance().getUnqfy().getAlbumById(trackReq.idAlbum);
+        if(album !== undefined) {
+            try {
+                let name = trackReq.name;
+                let duration = trackReq.duration;
+                let genres = trackReq.genres;
+                let track: Track = UNQfyController.getInstance().getUnqfy().addTrack(trackReq.idAlbum, {name, duration, genres})
+                return res.status(201).json(track);
+            } catch(e) {
+                return UNQfyController.handleError(res, new ResourceAlreadyExists());
+            }
+        } else {
+            return UNQfyController.handleError(res, new RelatedResourceNotFound());
+        }
+    }
 
     public static getTrackById(req: Request, res: Response): Response {
         const trackId: number = Number(req.params.id);
