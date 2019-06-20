@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { MusixMatchService } from "./musix_match_service";
 import { ErrorResponse } from "../api/error_response/error_response";
 
-export class MusixMatchController extends UNQfyController {
+export class MusixMatchController {
 
     public static findTracks(req: Request, res: Response): Promise<Response> {
         return MusixMatchService.findTracks(req.body.artist, req.body.track)
@@ -11,7 +11,7 @@ export class MusixMatchController extends UNQfyController {
                 return res.json(data);
             })
             .catch((err: ErrorResponse) => {
-                return this.handleError(res, err);
+                return UNQfyController.handleError(res, err);
             });
     }
 
@@ -22,7 +22,7 @@ export class MusixMatchController extends UNQfyController {
                 return res.json(data);
             })
             .catch((err: ErrorResponse) => {
-                return this.handleError(res, err);
+                return UNQfyController.handleError(res, err);
             });
     }
 }

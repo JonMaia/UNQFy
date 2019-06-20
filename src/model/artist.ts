@@ -32,8 +32,8 @@ export class Artist {
         return {
             id: this.id,
             name: this.name,
-            country: this.country,
-            albums : this.albums
+            albums : this.albums.map(album => album.toJson()),
+            country: this.country
         }
     }
 }

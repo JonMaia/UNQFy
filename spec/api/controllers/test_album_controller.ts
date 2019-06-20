@@ -7,7 +7,7 @@ let app: App;
 before(() => {
 	chai.use(chaiHttp);
 	chai.should();
-    app = new App(5001);
+    app = new App(5002);
     app.start();
 });
 

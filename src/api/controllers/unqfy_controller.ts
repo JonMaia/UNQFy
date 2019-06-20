@@ -6,9 +6,28 @@ import { ErrorResponse } from "../error_response/error_response";
 
 export class UNQfyController {
  
-    private static unqfy: UNQfy;
+    private static instance: UNQfyController;
+    private unqfy!: UNQfy;
 
-    protected static getUnqfy(): UNQfy{
+    private constructor() {
+
+    }
+
+    public static getInstance(): UNQfyController {
+        if(!UNQfyController.instance) {
+            UNQfyController.instance = new UNQfyController();
+        }
+        return UNQfyController.instance;
+    }
+
+    public static handleError(res: Response, error: ErrorResponse): Response {
+        return res.status(error.status).json({
+            status: error.status,
+            errorCode: error.message
+        })
+    }
+
+    public getUnqfy(): UNQfy{
         let filename = path.join(__dirname, '..', '..', '..', 'data.json');
         if(this.unqfy === undefined && fs.existsSync(filename)){
             this.unqfy = UNQfy.load(filename);
@@ -19,15 +38,9 @@ export class UNQfyController {
         return this.unqfy;
     }
 
-    protected static saveUnqfy(): void {
+    public saveUnqfy(): void {
         let filename = path.join(__dirname, '..', '..', '..', 'data.json');
         this.unqfy.save(filename);
     }
 
-    public static handleError(res: Response, error: ErrorResponse): Response {
-        return res.status(error.status).json({
-            status: error.status,
-            errorCode: error.message
-        })
-    }
 }

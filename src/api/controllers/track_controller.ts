@@ -4,15 +4,15 @@ import { Track } from "../../model/track";
 import { ResourceNotFoundResponse } from "../error_response/resource_not_found_response";
 import { ErrorResponse } from "../error_response/error_response";
 
-export class TrackController extends UNQfyController {
+export class TrackController {
 
     public static getTrackById(req: Request, res: Response): Response {
         const trackId: number = Number(req.params.id);
-        let track: Track | undefined = this.getUnqfy().getTrackById(trackId);
+        let track: Track | undefined = UNQfyController.getInstance().getUnqfy().getTrackById(trackId);
         if(track !== undefined) {
             return res.json(track);
         } else {
-            return this.handleError(res, new ResourceNotFoundResponse());
+            return UNQfyController.handleError(res, new ResourceNotFoundResponse());
         }
     }
 
@@ -27,7 +27,7 @@ export class TrackController extends UNQfyController {
      */
     public static getLyricsFromTrack(req: Request, res: Response) {
         const trackId: number = Number(req.params.id);
-        let track: Track | undefined = this.getUnqfy().getTrackById(trackId);
+        let track: Track | undefined = UNQfyController.getInstance().getUnqfy().getTrackById(trackId);
         if(track !== undefined) {
             track.getLyrics()
                 .then((lyrics: string) => {
@@ -36,10 +36,10 @@ export class TrackController extends UNQfyController {
                     }
                 })
                 .catch((err: ErrorResponse) => {
-                    return this.handleError(res, err);
+                    return UNQfyController.handleError(res, err);
                 });
         } else {
-            return this.handleError(res, new ResourceNotFoundResponse());
+            return UNQfyController.handleError(res, new ResourceNotFoundResponse());
         }
     }
 
