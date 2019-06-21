@@ -103,4 +103,15 @@ export class SpotifyService {
                 });
             })
     }
+
+    public static getAlbumsToArtist(artistName: string) {
+        return SpotifyService.findArtistsByName(artistName)
+                .then((artists: Array<ArtistSpotify>) => {
+                    let artist = artists[0]
+                    return SpotifyService.findAlbumsFromArtist(artist.id);
+                })
+                .then((albums: Array<Album>) => {
+                    return albums;
+                })
+    }
 }

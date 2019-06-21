@@ -5,6 +5,7 @@ import { UNQfyController } from '../../../src/api/controllers/unqfy_controller';
 import { UNQfy } from '../../../src/unqfy';
 
 let app: App;
+let unqfy: UNQfy = new UNQfy();
 
 before(() => {
 	chai.use(chaiHttp);
@@ -12,10 +13,8 @@ before(() => {
     app = new App(5001);
     app.start();
 
-    let unqfy: UNQfy = new UNQfy();
     unqfy.addArtist({name: 'El Kuelgue', country: 'Argentina'});
     unqfy.addAlbum({artistId: 1, name: 'Ruli', year: 2013});
-    UNQfyController.getInstance().setUnqfy(unqfy);
 });
 
 after(() => {
@@ -23,6 +22,12 @@ after(() => {
 });
 
 describe('Track Controller', () => {
+
+    it('Init singleton Unqfy', () => {
+        // Inicializo aca la instancia de unqfy porque si lo hago en el before es pisada
+        // por otros test que en su before harán lo mismo, ya que es un singleton
+        UNQfyController.getInstance().setUnqfy(unqfy);
+    })
 
     it("POST a '/api/tracks/' debe crear un track con los datos pasados por el body", () => {
         return chai.request(app.getApp())

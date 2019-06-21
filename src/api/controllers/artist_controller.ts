@@ -5,6 +5,9 @@ import { UNQfyController } from './unqfy_controller';
 import { ResourceNotFoundResponse } from '../error_response/resource_not_found_response';
 import { BadResquestResponse } from '../error_response/bad_resquest_response';
 import { ResourceAlreadyExists } from '../error_response/resource_already_exists';
+import { RelatedResourceNotFound } from '../error_response/related_resource_not_found';
+import { ErrorResponse } from '../error_response/error_response';
+import { Album } from '../../model/album';
 
 export class ArtistController {
 
@@ -96,5 +99,21 @@ export class ArtistController {
         const artistName: string = req.query.name || '';
         let artists: Array<Artist> = UNQfyController.getInstance().getUnqfy().filterArtistsByNameNoSensible(artistName); 
         return res.status(200).json(artists.map(artist => artist.toJson()));
-      }
+    }
+
+    public static populateAlbumsFromSpotify(req: Request, res: Response) {
+        let id: number = Number(req.params.id);
+        let artist: Artist | undefined = UNQfyController.getInstance().getUnqfy().getArtistById(id);
+        if(artist !== undefined) {
+            artist.populateAlbumsFromSpotify()
+                .then((albums: Array<Album>) => {
+                    return res.status(201).json(albums.map(album => album.toJson()));
+                })
+                .catch((err: ErrorResponse) => {
+                    return UNQfyController.handleError(res, err);
+                })
+        } else {
+            return UNQfyController.handleError(res, new RelatedResourceNotFound());
+        }
+    }
 }

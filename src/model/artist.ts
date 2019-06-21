@@ -1,4 +1,5 @@
 import { Album } from "./album";
+import { SpotifyService } from "../api_spotify/spotify_service";
 
 export class Artist {
     public id: number;
@@ -28,6 +29,20 @@ export class Artist {
     public deleteAlbum(album: Album): void {
         this.albums.splice(this.albums.indexOf(album), 1);
     }
+
+    public populateAlbumsFromSpotify() {
+        return SpotifyService.getAlbumsToArtist(this.name)
+                .then((albums: Array<Album>) => {
+                    albums.forEach(album => {
+                        if(!this.hasAlbum(album.name)) {
+                            album.idArtist = this.id;
+                            this.albums.push(album);
+                        }
+                    });
+                    return albums;
+                })
+    }
+
     public toJson() {
         return {
             id: this.id,
