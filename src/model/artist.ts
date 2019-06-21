@@ -31,7 +31,7 @@ export class Artist {
     }
 
     public populateAlbumsFromSpotify() {
-        return SpotifyService.getAlbumsToArtist(this.name)
+        return SpotifyService.getAlbumsToArtist(this.id, this.name)
                 .then((albums: Array<Album>) => {
                     albums.forEach(album => {
                         if(!this.hasAlbum(album.name)) {
