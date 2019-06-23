@@ -7,7 +7,7 @@ let app: App;
 before(() => {
 	chai.use(chaiHttp);
 	chai.should();
-    app = new App(5001);
+    app = new App(5005);
     app.start();
 });
 
@@ -64,12 +64,13 @@ describe('Album Controller', () => {
             .post('api/albums')
             .set('content-type', 'application/json')
             .send({name: 'The Book of Souls', year: 2018})
-            .then(res => {
+            .then(function (res) {
                 let album = res.body;
-                let albumExpected = [{name: 'The Book of Souls', year: 2018}];
+                let albumExpected = {name: 'The Book of Souls', year: 2018};
+                assert.equal(res.status, 201);
                 assert.equal(JSON.stringify(album), JSON.stringify(albumExpected));
             })
-            .catch(error => {
+            .catch(function (error) {
                 console.log(error);
                 assert.isNotOk({status: 201}, 'No se agrego el album');
             })
