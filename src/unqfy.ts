@@ -228,7 +228,7 @@ export class UNQfy {
     }
 
     public filterAlbumByName(name: string): Array<Album> {
-        return this.getAllAlbums().filter(album => album.name.includes(name));
+        return this.getAllAlbums().filter(album => album.name.toLowerCase().includes(name.toLowerCase()));
     }
 
     public getAllAlbums(): Array<Album> {

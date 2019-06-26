@@ -9,6 +9,8 @@ import { Album } from "../model/album";
 
 export class SpotifyService {
 
+    private static cache: Map<number, Array<Album>> = new Map()
+
     public static authenticate() {
         auth();
     }
@@ -102,5 +104,29 @@ export class SpotifyService {
                     reject(new ErrorResponse(error.status, error.message));
                 });
             })
+    }
+
+    public static getAlbumsToArtist(artistId: number, artistName: string) {
+        let albums: Array<Album> | undefined = this.getAlbumsFromCache(artistId);
+        if(albums !== undefined) {
+            return Promise.resolve(albums);
+        }
+        return SpotifyService.findArtistsByName(artistName)
+                .then((artists: Array<ArtistSpotify>) => {
+                    let artist = artists[0]
+                    return SpotifyService.findAlbumsFromArtist(artist.id);
+                })
+                .then((albums: Array<Album>) => {
+                    this.saveInCache(artistId, albums);
+                    return albums;
+                })
+    }
+
+    private static getAlbumsFromCache(artistId: number) {
+        return this.cache.get(artistId);
+    }
+
+    private static saveInCache(artistId: number, albums: Array<Album>) {
+        this.cache.set(artistId, albums);
     }
 }
