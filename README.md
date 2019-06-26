@@ -40,10 +40,40 @@ Luego para ejecutar la pre-carga de datos
 ```bash
 npm run build
 ```  
+---
+**API REST**  
+Se crearon endpoints para agregar, eliminar y obtener artistas, albumes y tracks. ([Documento visado 2](https://drive.google.com/drive/folders/1Z6QEKNDs4PfFot8y4O1_3JFiTNez-jIZ))    
 
-**Testing**  
-Para ejecutar los test deberemos ingresar en consola `npm test`, nos printeara los test indicando cuales pasaron y cuales no
+* Endpoints de Tracks creados  
+**POST** a `'/api/tracks` - Body `{idAlbum: <number>, name: <string>, duration: <number>, genres: <Array<string>>}`   
+**GET** a `'/api/tracks/:id`
+   
+Se realizaron consultas a las api de Spotify y MatchMusix, con el fin de obtener albumes y letras de canciones en nuestro proyecto.  
+Se puede levantar de 2 maneras del servidor con los siguientes scripts:  
+**PROD:** `npm run server` (Levantará solo con los endpoints pedidos)  
+**DEV:** `npm run server_dev` (En este se podrán utilizar endpoints de spotify y musixmatch, cada request a la api rest generará printeara data en la consola debido a la librería `morgan`)
+
+**Spotify**  
+Para utilizar la api de spotify primero debemos generar las credenciales para poder acceder a ella.  
+Para esto se creo el script `npm run auth_spotify`, este levantará un servidor que nos llevara a loguearnos a spotify y tener las credenciales.
+Se crearon endpoints para la obtención de id artista y sus albumes. Estos endpoints estan habilitados para la versión dev del proyecto.  
   
+**Musix Match**  
+Al igual que con la api de spotify, tiene endpoints para obtener tracks con sus ids y otro para obtener los lyrics de dicho id previamente obtenido. También, solo están disponibles para la versión dev del proyecto.  
+  
+ ***Aclaraciones:*** Tanto el uso de spotify y musixmatch están incluídos en el proyecto, por lo tanto tenemos los endpoints para obtener albumes de un artista y lyrics de un track, solo que bloquea para el usuario final.  
+Dejo los endpoints para obtener albumes y tracks, en ambos casos no necesitan pasar argumentos por request ni query:  
+* Albumes  
+**POST** a `'/api/artists/:id/populate_albums'`  
+* Tracks - Lyrics  
+**GET** a `'/api/tracks/:id/lyrics'`
+
+---
+  
+**Testing**  
+Para ejecutar los test deberemos ingresar en consola `npm test`, nos printeara los test indicando cuales pasaron y cuales no.  
+***Aclaraciones:*** primero deberemos generar las credenciales de spotify con el script `npm run auth_spotify`, ya que sino los test pueden romper 
+   
 ---  
 **Yargs**  
 Como estamos usando yargs podemos definir los comandos que deseemos para usar en consola, si el comando no existe no ejecutará nada ni romperá, solo se mostrará que se puede usar el comando de ayuda para ver los comandos disponibles.  
