@@ -12,7 +12,7 @@ router.route('/artists/:id')
     .patch(ArtistController.validateData.bind(ArtistController), ArtistController.updateArtist.bind(ArtistController))
     .delete(ArtistController.deleteArtist.bind(ArtistController))
 
-router.route('/artists/:id/populate')
+router.route('/artists/:id/populate_albums')
     .post(ArtistController.populateAlbumsFromSpotify)
 
 export default router;

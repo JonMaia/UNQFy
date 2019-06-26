@@ -43,9 +43,9 @@ describe('Artist Controller', () => {
             })
     });
 
-    it("POST a '/api/artists/1/populate' debe buscar y agregar todos los albumes del artista de spotify", () => {
+    it("POST a '/api/artists/1/populate_albums' debe buscar y agregar todos los albumes del artista de spotify", () => {
         return chai.request(app.getApp())
-            .post('/api/artists/1/populate')
+            .post('/api/artists/1/populate_albums')
             .set('content-type', 'application/json')
             .then(res => {
                 let albums = res.body;
