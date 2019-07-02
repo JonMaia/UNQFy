@@ -6,10 +6,11 @@ import { Album } from './model/album';
 import { Track } from './model/track';
 import {TrackInterface} from './model/interfaces';
 import { Playlist } from './model/playlist';
+import { Observer } from './observers/observer';
 
 export class UNQfy {
     
-    private listeners: any;
+    private listeners: Array<Observer>;
     private artists: Array<Artist>;
     private artistId: number = 1;
     private trackID: number = 1;
@@ -20,6 +21,8 @@ export class UNQfy {
     constructor() {
         this.artists = new Array();
         this.playLists = new Array();
+        this.listeners = new Array();
+        // this.listeners.push(new LoggingObserver());
     }
 
     public getAllArtists(): Array<Artist>{
@@ -127,6 +130,9 @@ export class UNQfy {
             let newAlbum = new Album(albumData.artistId, albumData.name, albumData.year);
             newAlbum.setId(this.getNextAlbumId());
             artist.addAlbum(newAlbum);
+            this.listeners.forEach(listener => {
+                listener.addAlbum(newAlbum);
+            });
             return newAlbum;
         } else {
             throw new Error(`No existe artista con el Id: '${albumData.artistId}'`);
