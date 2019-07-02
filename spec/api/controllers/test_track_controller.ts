@@ -11,6 +11,7 @@ before(() => {
 	chai.use(chaiHttp);
 	chai.should();
     app = new App(5001);
+    app.setRoutesUnqfy();
     app.start();
 
     unqfy.addArtist({name: 'El Kuelgue', country: 'Argentina'});

@@ -11,6 +11,7 @@ before(() => {
 	chai.use(chaiHttp);
 	chai.should();
     app = new App(5003);
+    app.setRoutesUnqfy();
     app.start();
 
 });

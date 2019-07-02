@@ -21,7 +21,6 @@ export class App {
         this.app = express();
         this.settings();
         this.middlewars();
-        this.routes();
     }
 
     private settings() {
@@ -41,7 +40,7 @@ export class App {
         }
     }
 
-    private routes() {
+    public setRoutesUnqfy() {
         this.app.use(IndexRoutes);
         this.app.use('/api', ArtistRoutes);
         this.app.use('/api', AlbumRoutes);
@@ -50,11 +49,15 @@ export class App {
             this.app.use('/api', SpotifyRoutes);
             this.app.use('/api', MusixMatchRoutes);
         }
+        this.setControlRutasInexistentes();
+    }
+
+    private setControlRutasInexistentes() {
         this.app.use((req, res, next) => {
             if(!req.route) {
                 UNQfyController.handleError(res, new ResourceNotFoundResponse());
             }
-        })
+        });
     }
 
     public start(): void {

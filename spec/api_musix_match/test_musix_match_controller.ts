@@ -9,6 +9,7 @@ before(() => {
 	chai.use(chaiHttp);
 	chai.should();
     app = new App(7000);
+    app.setRoutesUnqfy();
     app.start();
 });
 

@@ -11,6 +11,7 @@ before(() => {
 	chai.use(chaiHttp);
 	chai.should();
     app = new App(5005);
+    app.setRoutesUnqfy();
     app.start();
 
     unqfy.addArtist({name: 'Iron Maiden', country: 'Inglaterra'});
