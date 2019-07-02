@@ -1,4 +1,4 @@
-import express, {Application} from 'express';
+import express, {Application, Request, Response, NextFunction} from 'express';
 import { Server } from 'http';
 import morgan from 'morgan';
 
@@ -10,6 +10,7 @@ import SpotifyRoutes from '../routes/spotify_routes';
 import MusixMatchRoutes from '../routes/musix_match_routes';
 import { ResourceNotFoundResponse } from '../error_response/resource_not_found_response';
 import { UNQfyController } from '../controllers/unqfy_controller';
+import { ErrorRequestHandler } from 'express-serve-static-core';
 
 export class App {
 
@@ -29,6 +30,12 @@ export class App {
 
     private middlewars() {
         this.app.use(express.json());
+        this.app.use((err: ErrorRequestHandler, req: Request, res: Response, next: NextFunction) => {
+            if(err) {
+                return UNQfyController.handleError(res, new ResourceNotFoundResponse());
+            }
+            next();
+        })
         if(process.env.NODE_ENV === 'DEV') {
             this.app.use(morgan('dev'));
         }
