@@ -14,3 +14,8 @@ export interface TrackInterface {
     duration: number;
     genres: Array<string>;
 }
+
+export interface LogInterface {
+    message: string;
+    level: string;
+}

@@ -9,6 +9,7 @@ import TrackRoutes from  '../routes/track_routes';
 import SpotifyRoutes from '../routes/spotify_routes';
 import MusixMatchRoutes from '../routes/musix_match_routes';
 import MonitorRoutes from '../routes/monitor_routes';
+import LogRoutes from '../routes/log_routes';
 import { ResourceNotFoundResponse } from '../error_response/resource_not_found_response';
 import { UNQfyController } from '../controllers/unqfy_controller';
 import { ErrorRequestHandler } from 'express-serve-static-core';
@@ -46,9 +47,10 @@ export class App {
         this.app.use('/api', ArtistRoutes);
         this.app.use('/api', AlbumRoutes);
         this.app.use('/api', TrackRoutes);
+        this.app.use('/api', LogRoutes);
         if(process.env.NODE_ENV === 'DEV') {
             this.app.use('/api', SpotifyRoutes);
-            this.app.use('/api', MusixMatchRoutes);
+            this.app.use('/api', MusixMatchRoutes);      
         }
         this.setControlRutasInexistentes();
     }

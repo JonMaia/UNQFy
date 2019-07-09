@@ -5,12 +5,12 @@ import { Response } from "express";
 import { ErrorResponse } from "../error_response/error_response";
 
 export class UNQfyController {
- 
+
     private static instance: UNQfyController;
     private unqfy!: UNQfy;
-
+     
     private constructor() {
-
+       
     }
 
     public static getInstance(): UNQfyController {

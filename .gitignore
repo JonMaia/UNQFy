@@ -63,6 +63,8 @@ typings/
 #Archivos .js compilados de ts
 dist/
 
+logger.txt
+
 data.json
 .vscode/
 

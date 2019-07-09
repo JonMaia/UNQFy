@@ -7,6 +7,7 @@ import { Track } from './model/track';
 import {TrackInterface} from './model/interfaces';
 import { Playlist } from './model/playlist';
 import { Observer } from './observers/observer';
+import { LoggingObserver } from './observers/logging_observer';
 
 export class UNQfy {
     
@@ -22,7 +23,7 @@ export class UNQfy {
         this.artists = new Array();
         this.playLists = new Array();
         this.listeners = new Array();
-        // this.listeners.push(new LoggingObserver());
+        this.listeners.push(new LoggingObserver());
     }
 
     public getAllArtists(): Array<Artist>{
@@ -39,6 +40,9 @@ export class UNQfy {
             let newArtist = new Artist(artistData.name, artistData.country);
             newArtist.id = this.nextArtistId();
             this.artists.push(newArtist);
+            this.listeners.forEach(listener => {
+                listener.log(`Se agrego el artista con el Id: '${newArtist.id}'`,"info");
+            });
             return newArtist;
         } else {
             throw new Error(`Ya existe el artista '${artistData.name}'`);
@@ -63,6 +67,9 @@ export class UNQfy {
         let artist = this.getArtistById(id);
         if(artist !== undefined) {
             this.removeArtist(artist);
+            this.listeners.forEach(listener => {
+                listener.log(`Se elimino el artista con el Id: '${id}'`,"info");
+            });
         } else {
             throw new Error(`No existe un artista con id '${id}'`);
         }
@@ -116,6 +123,9 @@ export class UNQfy {
         if(albumUpdate !== undefined) {
             albumUpdate.name = artistName;
             albumUpdate.country = artistCountry;
+            this.listeners.forEach(listener => {
+                listener.log(`Se Actualizo el artista con el Id: '${artistId}'`,"info");
+            });
         }
             return albumUpdate;   
     }
@@ -131,7 +141,7 @@ export class UNQfy {
             newAlbum.setId(this.getNextAlbumId());
             artist.addAlbum(newAlbum);
             this.listeners.forEach(listener => {
-                listener.addAlbum(newAlbum);
+                listener.log(`Se agrego el album con el Id: '${albumData.artistId}'`,"info");
             });
             return newAlbum;
         } else {
@@ -156,6 +166,9 @@ export class UNQfy {
         let album = this.getAlbumById(id);
         if(album !== undefined) {
             this.removeAlbum(album);
+            this.listeners.forEach(listener => {
+                listener.log(`Se elimino el album con el Id: '${id}'`,"info");
+            });
         } else {
             throw new Error(`El album con el id:${id} no existe`);
         }
@@ -194,6 +207,9 @@ export class UNQfy {
                 let newTrack = new Track(trackData.name, trackData.duration, trackData.genres, albumId);
                 newTrack.id = this.getNextTrackId();
                 album.addTrack(newTrack);
+                this.listeners.forEach(listener => {
+                    listener.log(`Se agrego el track con el Id: '${albumId}'`,"info");
+                });
                 return newTrack;
             } else {
                 throw new Error(`El track '${trackData.name}' ya se encuentra en el album`);
@@ -207,6 +223,9 @@ export class UNQfy {
         let track = this.getTrackById(trackId);
         if(track !== undefined) {
             this.removeTrack(track);
+            this.listeners.forEach(listener => {
+                listener.log(`Se elimino el track con el Id: '${trackId}'`,"info");
+            });
         }
     }
 
