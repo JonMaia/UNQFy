@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import net from "net";
+import { SlackService } from "../services/slack_service";
 
 export class MonitorController {
 
     private static enabled: boolean = true;
     private static readonly SERVERS = [
-        {name_server: 'Monitor', hostname: 'localhost', port: 5000},
-        {name_server: 'UnqFy', hostname: 'localhost', port: 3000}
+        {name_server: 'Monitor', hostname: 'localhost', port: 5000, enabled: false},
+        {name_server: 'UnqFy', hostname: 'localhost', port: 3000, enabled: false}
     ]
 
     public static activate(req: Request, res: Response): Response {
@@ -29,9 +30,15 @@ export class MonitorController {
             Promise.all(MonitorController.SERVERS.map((server) => {
                 return this.checkConnection(server.hostname, server.port)
                         .then(() => {
+                            if(!server.enabled) {
+                                new SlackService().notifyServiceIsWorking(server.name_server);
+                                server.enabled = true;
+                            }
                             return true;
                         })
                         .catch((err) => {
+                            new SlackService().notifyServiceIsNotWorking(server.name_server);
+                            server.enabled = false;
                             if(err.code) {
                                 console.log(`${err.code}: '${err.address}:${err.port}'`)
                             } else {

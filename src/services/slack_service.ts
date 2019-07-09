@@ -3,6 +3,7 @@ import rp from 'request-promise';
 export class SlackService {
 
     private static readonly TOKEN_UNQ_TALLER_DE_SERVICIOS = 'xoxs-588731662279-579413067777-588101111940-52aef457e0fea42a14cea789d485232938c5d70843f87b87683905b40a330286';
+    private static readonly CHANNEL = 'DHA2Z1Z60'; //Todo: cambiar channel, ahora esta apuntando a mi chat (Ariel Ramirez)
 
     public sendMessage(channel: string, message: string, token?: string) {
         if(!token) {
@@ -23,5 +24,24 @@ export class SlackService {
             .catch(err => {
                 return Promise.reject(new Error(err.error));
             })
+    }
+
+    public notifyServiceIsWorking(nameServer: string) {
+        let message = `${this.getDateAndHour()} El servicio '${nameServer}' ha vuelto a la normalidad`;
+        this.sendMessage(SlackService.CHANNEL, message);
+    }
+
+    public notifyServiceIsNotWorking(nameServer: string) {
+        let message = `${this.getDateAndHour()} El servicio '${nameServer}' ha dejado de funcionar`;
+        this.sendMessage(SlackService.CHANNEL, message);
+    }
+
+    private getDateAndHour(): string {
+        let date = new Date();
+        let dia = date.getDate();
+        let mes = date.getMonth() + 1;
+        let hora = date.getHours();
+        let minutos = date.getMinutes();
+        return `[${dia}/${mes} - ${hora}:${minutos}]`;
     }
 }
