@@ -19,3 +19,8 @@ export interface LogInterface {
     message: string;
     level: string;
 }
+
+export interface NotificationInterface {
+    artistId: number;
+    email: string;
+}
