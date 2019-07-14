@@ -47,7 +47,6 @@ export class App {
         this.app.use('/api', ArtistRoutes);
         this.app.use('/api', AlbumRoutes);
         this.app.use('/api', TrackRoutes);
-        this.app.use('/api', LogRoutes);
         if(process.env.NODE_ENV === 'DEV') {
             this.app.use('/api', SpotifyRoutes);
             this.app.use('/api', MusixMatchRoutes);      
@@ -60,6 +59,11 @@ export class App {
         this.setControlRutasInexistentes();
     }
 
+    public setRoutesLog() {
+        this.app.use('/api', LogRoutes);
+        this.setControlRutasInexistentes();
+    }
+    
     private setControlRutasInexistentes() {
         this.app.use((req, res, next) => {
             if(!req.route) {

@@ -23,11 +23,11 @@ export class LogController {
 
     public static logging(req: Request, res: Response): Response {
         const logBody: LogInterface = req.body;
-        let filename = path.join(__dirname, '..', '..', 'logger.txt');
-        fs.appendFileSync(filename, JSON.stringify(logBody,null, 2));
-        
-        winston.log(logBody.level, logBody.message);
-
+        if(this.state){
+            let filename = path.join(__dirname, '..', '..', 'logger.txt');
+            fs.appendFileSync(filename, JSON.stringify(logBody,null, 2));
+            winston.log(logBody.level, logBody.message);
+        }
         return res.status(200).json();
     }
 
