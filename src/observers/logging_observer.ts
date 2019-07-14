@@ -1,31 +1,42 @@
 import rp from 'request-promise';
 import { Observer } from "./observer";
+import { Artist } from '../model/artist';
+import { Album } from '../model/album';
+import { Track } from '../model/track';
 
 export class LoggingObserver implements Observer{
 
-    public notifyAddAlbum(mensagge:string, level: string): void{
-        this.log(mensagge,level)
+    public notifyAddAlbum(album:Album): void{
+        this.log(`Se agrego el album '${album.name}' con el Id: '${album.id}'`,"info")
     }
-    public notifyDeleteAlbum(mensagge:string, level: string): void{
-        this.log(mensagge,level)
-    }
-
-    public notifyAddArtist(mensagge:string, level: string): void{
-        this.log(mensagge,level)
-    }
-    public notifyDeleteArtist(mensagge:string, level: string): void{
-        this.log(mensagge,level)
+    public notifyDeleteAlbum(album:Album|undefined): void{
+        if(album !==undefined){
+        this.log(`Se elimino el album '${album.name}' con el Id: '${album.id}'`,"info")
+        }
     }
 
-    public notifyAddTrack(mensagge:string, level: string): void{
-        this.log(mensagge,level)
+    public notifyAddArtist(artist:Artist): void{       
+        this.log(`Se agrego el artista '${artist.name}' con el Id: '${artist.id}'`,"info")
     }
-    public notifyDeleteTrack(mensagge:string, level: string): void{
-        this.log(mensagge,level)
+    public notifyDeleteArtist(artist:Artist|undefined): void{      
+        if(artist !==undefined){  
+        this.log(`Se elimino el artista '${artist.name}' con el Id: '${artist.id}'`,"info")
+        }
     }
 
-    public notifyUpdateArtist(mensagge:string, level: string): void{
-        this.log(mensagge,level)
+    public notifyAddTrack(track:Track): void{
+        this.log(`Se agrego el track '${track.name}' con el Id: '${track.id}'`,"info")
+    }
+    public notifyDeleteTrack(track:Track|undefined): void{
+        if(track !==undefined){
+        this.log(`Se elimino el track '${track.name}' con el Id: '${track.id}'`,"info")
+        }
+    }
+
+    public notifyUpdateArtist(artist:Artist|undefined): void{
+        if(artist !==undefined){
+        this.log(`Se acualizo el artista '${artist.name}' con el Id: '${artist.id}'`,"info")
+        }
     }
 
     public log(mensagge:string, level: string): void{
