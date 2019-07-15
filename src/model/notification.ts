@@ -1,3 +1,5 @@
+const picklify = require('picklify');
+import fs from 'fs';
 
 export class Notification {
     
@@ -24,5 +26,15 @@ export class Notification {
         }
     }
 
-    
+    public save(filename: string) {
+        const serializedData = picklify.picklify(this);
+        fs.writeFileSync(filename, JSON.stringify(serializedData, null, 2));
+    }
+
+    public static load(filename: string) {
+        const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
+        const classes = [Notification];
+        return picklify.unpicklify(JSON.parse(serializedData), classes);
+    }
+
 }
