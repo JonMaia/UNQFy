@@ -134,6 +134,21 @@ export class NotificationController {
     }
     
     public static deleteSubscriptions(req: Request, res: Response): Promise<Response> {
-        
+        const notificationI: NotificationInterface = req.body;
+        let artistId: number = notificationI.artistId;
+        let artist = {
+            uri: `localhost:3000/api/artist/${artistId}`,
+            json: true
+        }
+        return rp(artist)
+            .then(data => {
+                this.instance.notification.deleteSubscriptors(artistId);
+                return res.status(200);     
+            })
+            .catch(err => {
+                return new Promise((resolve, reject) => {
+                    reject(new RelatedResourceNotFound());
+                });
+            });        
     }
 }

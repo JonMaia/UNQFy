@@ -42,6 +42,10 @@ export class Notification {
         
     }
 
+    public deleteSubscriptors(artistId: number){
+        this.subscriptions.set(artistId, []);
+    }
+
     public save(filename: string) {
         const serializedData = picklify.picklify(this);
         fs.writeFileSync(filename, JSON.stringify(serializedData, null, 2));
