@@ -76,8 +76,24 @@ export class NotificationController {
             });
     }
 
-    public static unsubscribe(req: Request, res: Response): Response {
-
+    public static unsubscribe(req: Request, res: Response): Promise<Response> {
+        const notificationI: NotificationInterface = req.body;
+        let artistId: number = notificationI.artistId;
+        let email: string = notificationI.email;
+        let artist = {
+            uri: `localhost:3000/api/artist/${artistId}`,
+            json: true
+        }
+        return rp(artist)
+            .then(data => {
+                this.instance.notification.unsubscribe(artistId, email);
+                return res.status(200);     
+            })
+            .catch(err => {
+                return new Promise((resolve, reject) => {
+                    reject(new RelatedResourceNotFound());
+                });
+            });
     }
 
     public static notify(req: Request, res: Response): Response{
