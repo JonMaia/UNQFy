@@ -1,22 +1,21 @@
 import { Router } from "express";
-import { GmailController } from "../../api_gmail/gmail_controller";
-
+import { NotificationController } from "../../api_gmail/notification_controller";
 
 const router = Router();
 
 router.route('/subscribe')
-      .post(GmailController.validateData.bind(GmailController), GmailController.subscribe.bind(GmailController));
+      .post(NotificationController.validateData.bind(NotificationController), NotificationController.subscribe.bind(NotificationController));
 
 router.route('/unsubscribe')
-      .post(GmailController.validateData.bind(GmailController), GmailController.unsubscribe.bind(GmailController));
+      .post(NotificationController.validateData.bind(NotificationController), NotificationController.unsubscribe.bind(NotificationController));
 
 router.route('/notify')
-      .post(GmailController.validateData.bind(GmailController), GmailController.notify.bind(GmailController));
+      .post(NotificationController.validateData.bind(NotificationController), NotificationController.notify.bind(NotificationController));
 
 router.route('/subscriptions?artistId=:id')
-      .get(GmailController.validateData.bind(GmailController), GmailController.subscriptions.bind(GmailController));
+      .get(NotificationController.validateData.bind(NotificationController), NotificationController.subscriptions.bind(NotificationController));
 
 router.route('/subscriptions')
-      .delete(GmailController.validateData.bind(GmailController), GmailController.deleteSubscriptions.bind(GmailController));
+      .delete(NotificationController.validateData.bind(NotificationController), NotificationController.deleteSubscriptions.bind(NotificationController));
 
 export default router;

@@ -23,8 +23,11 @@ export class GmailController {
         const notification: NotificationInterface = req.body;
         let artistId: number = notification.artistId;
         let email: string = notification.email;
-        if()
-
+        const artist: Artist | undefined = UNQfyController.getInstance().getUnqfy().getArtistById(artistId);
+        if(artist != undefined){
+            // this.notify.
+        }
+        return res;
     }
 
     public static unsubscribe(req: Request, res: Response): Response {
