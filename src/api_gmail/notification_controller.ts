@@ -1,10 +1,12 @@
 import fs from 'fs'; 
 import path from "path";
 import rp from 'request-promise';
-import { Response, NextFunction } from "express";
+import { Response, NextFunction, Request } from "express";
 import { NotificationInterface } from "../model/interfaces";
 import { Notification } from "../model/notification";
 import { ResourceNotFoundResponse } from '../api/error_response/resource_not_found_response';
+import { RelatedResourceNotFound } from '../api/error_response/related_resource_not_found';
+import { BadResquestResponse } from '../api/error_response/bad_resquest_response';
 
 
 
@@ -43,16 +45,18 @@ export class NotificationController {
     }
 
 
-    /*public static validateData(req: Request, res: Response, next: NextFunction) {
-        const artistId: number = req.;
+    public static validateData(req: Request, res: Response, next: NextFunction) {
+        const artistId: number = req.params.artistId;
         const email: string = req.params.email;
         if(!artistId || !email) {
-            return UNQfyController.handleError(res, new BadResquestResponse()); 
+            return new Promise((resolve, reject) => {
+                reject(new BadResquestResponse());
+            }) 
         }
         next();
-    }*/
+    }
 
-    public static subscribe(req: Request, res: Response): Response {
+    public static subscribe(req: Request, res: Response): Promise<Response> {
         const notificationI: NotificationInterface = req.body;
         let artistId: number = notificationI.artistId;
         let email: string = notificationI.email;
@@ -63,10 +67,11 @@ export class NotificationController {
         return rp(artist)
             .then(data => {
                 this.instance.notification.addSubscriptor(artistId, email);
+                return res.status(200);     
             })
             .catch(err => {
                 return new Promise((resolve, reject) => {
-                    reject(new ResourceNotFoundResponse());
+                    reject(new RelatedResourceNotFound());
                 });
             });
     }
