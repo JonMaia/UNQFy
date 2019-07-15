@@ -34,6 +34,14 @@ export class Notification {
         }
     }
 
+    public subscriptors(artistId: number){
+        return {artistId: artistId, subscriptors: this.subscriptions.get(artistId)};
+    }
+
+    public notify(artistId: number){
+        
+    }
+
     public save(filename: string) {
         const serializedData = picklify.picklify(this);
         fs.writeFileSync(filename, JSON.stringify(serializedData, null, 2));

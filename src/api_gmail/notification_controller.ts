@@ -96,15 +96,44 @@ export class NotificationController {
             });
     }
 
-    public static notify(req: Request, res: Response): Response{
-
+    public static notify(req: Request, res: Response): Promise<Response>{
+        const notificationI: NotificationInterface = req.body;
+        let artistId: number = notificationI.artistId;
+        let artist = {
+            uri: `localhost:3000/api/artist/${artistId}`,
+            json: true
+        }
+        return rp(artist)
+            .then(data => {
+                this.instance.notification.notify(artistId);
+                return res.status(200);     
+            })
+            .catch(err => {
+                return new Promise((resolve, reject) => {
+                    reject(new RelatedResourceNotFound());
+                });
+            });
     }
 
-    public static subscriptions(req: Request, res: Response): Response{
-
+    public static subscriptions(req: Request, res: Response): Promise<Response> {
+        let artistId: number = req.params.artistId;
+        let artist = {
+            uri: `localhost:3000/api/artist/${artistId}`,
+            json: true
+        }
+        return rp(artist)
+            .then(data => {
+                const subs = this.instance.notification.subscriptors(artistId);
+                return res.status(200).json(subs);     
+            })
+            .catch(err => {
+                return new Promise((resolve, reject) => {
+                    reject(new RelatedResourceNotFound());
+                });
+            });
     }
     
-    public static deleteSubscriptions(req: Request, res: Response): Response {
+    public static deleteSubscriptions(req: Request, res: Response): Promise<Response> {
         
     }
 }
