@@ -10,6 +10,7 @@ import SpotifyRoutes from '../routes/spotify_routes';
 import MusixMatchRoutes from '../routes/musix_match_routes';
 import MonitorRoutes from '../routes/monitor_routes';
 import LogRoutes from '../routes/log_routes';
+import NotificationRoutes from '../routes/gmail_routes'
 import { ResourceNotFoundResponse } from '../error_response/resource_not_found_response';
 import { UNQfyController } from '../controllers/unqfy_controller';
 import { ErrorRequestHandler } from 'express-serve-static-core';
@@ -61,6 +62,11 @@ export class App {
 
     public setRoutesLog() {
         this.app.use('/api', LogRoutes);
+        this.setControlRutasInexistentes();
+    }
+
+    public setRoutesNotificacion() {
+        this.app.use('/api', NotificationRoutes);
         this.setControlRutasInexistentes();
     }
     

@@ -31,8 +31,8 @@ export class Notification {
         return {artistId: artistId, subscriptors: this.subscriptions.get(artistId)};
     }
 
-    public notify(artistId: number){
-        
+    public subscriptorsOnly(artistId: number): Array<string> | undefined{
+        return this.subscriptions.get(artistId);
     }
 
     public deleteSubscriptors(artistId: number){

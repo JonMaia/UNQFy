@@ -6,12 +6,24 @@ import { NotificationInterface } from "../model/interfaces";
 import { Notification } from "../model/notification";
 import { RelatedResourceNotFound } from '../api/error_response/related_resource_not_found';
 import { BadResquestResponse } from '../api/error_response/bad_resquest_response';
+import { GmailService } from './gmail_service';
+import { UNQfyController } from '../api/controllers/unqfy_controller';
+import { ErrorResponse } from '../api/error_response/error_response';
 
 
 export class NotificationController {
 
     private static instance: NotificationController;
     private notification!: Notification;
+    
+    public static getToken(req: Request, res: Response): Response {
+        try {
+            let token: string = GmailService.getToken();
+            return res.json({token});
+        } catch(e) {
+            return UNQfyController.handleError(res, new ErrorResponse(400, 'token invalido'));
+        }
+    }
 
     public static getInstance(): NotificationController {
         if(!NotificationController.instance) {
@@ -103,7 +115,14 @@ export class NotificationController {
         }
         return rp(artist)
             .then(data => {
-                this.instance.notification.notify(artistId);
+                let emailsSub = this.instance.notification.subscriptorsOnly(artistId);
+                if(emailsSub != undefined){
+                    emailsSub.forEach((email: string) => GmailService.sendEmail(
+                        `Nuevo album para artista: ${artistId}`,
+                        "",
+                        email)
+                    )
+                }
                 return res.status(200);     
             })
             .catch(err => {
