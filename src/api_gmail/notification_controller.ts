@@ -80,9 +80,7 @@ export class NotificationController {
                 return res.status(200);     
             })
             .catch(err => {
-                return new Promise((resolve, reject) => {
-                    reject(new RelatedResourceNotFound());
-                });
+                return UNQfyController.handleError(res, new RelatedResourceNotFound());
             });
     }
 

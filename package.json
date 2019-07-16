@@ -21,6 +21,7 @@
     "request-promise": "^4.2.4",
     "ts-node": "^8.1.0",
     "typescript": "^3.4.3",
+    "winston": "^3.2.1",
     "winston-loggly-bulk": "^3.0.1",
     "xpress": "^2.4.6",
     "yargs": "^13.2.2"
