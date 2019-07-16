@@ -18,18 +18,11 @@ export class Notification {
             this.subscriptions.set(artistId, getEmails);
         }
     }   
-    
-   /* public existSubscriptor(artistId: number, email: string){
-        const getEmails: string[] | undefined = this.subscriptions.get(artistId);
-        if(getEmails != undefined){
-            return getEmails.includes(email);
-        }
-    }*/
 
     public unsubscribe(artistId: number, email: string){
         let getEmails: string [] | undefined = this.subscriptions.get(artistId);
         if(getEmails != undefined){
-            getEmails.filter(e => e == email);
+            getEmails = getEmails.filter(e => e == email);
             this.subscriptions.set(artistId, getEmails);
         }
     }

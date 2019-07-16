@@ -4,10 +4,8 @@ import rp from 'request-promise';
 import { Response, NextFunction, Request } from "express";
 import { NotificationInterface } from "../model/interfaces";
 import { Notification } from "../model/notification";
-import { ResourceNotFoundResponse } from '../api/error_response/resource_not_found_response';
 import { RelatedResourceNotFound } from '../api/error_response/related_resource_not_found';
 import { BadResquestResponse } from '../api/error_response/bad_resquest_response';
-
 
 
 export class NotificationController {
