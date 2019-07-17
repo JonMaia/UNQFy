@@ -56,12 +56,9 @@ export class NotificationController {
 
 
     public static validateData(req: Request, res: Response, next: NextFunction) {
-        const artistId: number = req.params.artistId;
-        const email: string = req.params.email;
-        if(!artistId || !email) {
-            return new Promise((resolve, reject) => {
-                reject(new BadResquestResponse());
-            }) 
+        const notification: NotificationInterface = req.body;
+        if(!notification.artistId || !notification.email) {
+            return UNQfyController.handleError(res, new BadResquestResponse());
         }
         next();
     }
