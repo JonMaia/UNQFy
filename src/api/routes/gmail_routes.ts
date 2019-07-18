@@ -15,8 +15,8 @@ router.route('/notification/unsubscribe')
 router.route('/notification/notify')
       .post(NotificationController.validateData.bind(NotificationController), NotificationController.notify.bind(NotificationController));
 
-router.route('/notification/subscriptions?artistId=:id')
-      .get(NotificationController.validateData.bind(NotificationController), NotificationController.subscriptions.bind(NotificationController));
+router.route('/notification/subscriptions')
+      .get(NotificationController.subscriptions.bind(NotificationController));
 
 router.route('/notification/subscriptions')
       .delete(NotificationController.validateData.bind(NotificationController), NotificationController.deleteSubscriptions.bind(NotificationController));

@@ -68,13 +68,13 @@ export class NotificationController {
         let artistId: number = notificationI.artistId;
         let email: string = notificationI.email;
         let artist = {
-            uri: `localhost:3000/api/artist/${artistId}`,
+            uri: `http://localhost:3000/api/artists/${artistId}`,
             json: true
         }
         return rp(artist)
             .then(data => {
-                this.instance.notification.addSubscriptor(artistId, email);
-                return res.status(200);     
+                this.getInstance().getNotification().addSubscriptor(artistId, email);
+                return res.status(200).json();
             })
             .catch(err => {
                 return UNQfyController.handleError(res, new RelatedResourceNotFound());
@@ -86,12 +86,12 @@ export class NotificationController {
         let artistId: number = notificationI.artistId;
         let email: string = notificationI.email;
         let artist = {
-            uri: `localhost:3000/api/artist/${artistId}`,
+            uri: `http://localhost:3000/api/artists/${artistId}`,
             json: true
         }
         return rp(artist)
             .then(data => {
-                this.instance.notification.unsubscribe(artistId, email);
+                this.getInstance().getNotification().unsubscribe(artistId, email);
                 return res.status(200);     
             })
             .catch(err => {
@@ -103,12 +103,12 @@ export class NotificationController {
         const notificationI: NotificationInterface = req.body;
         let artistId: number = notificationI.artistId;
         let artist = {
-            uri: `localhost:3000/api/artist/${artistId}`,
+            uri: `http://localhost:3000/api/artists/${artistId}`,
             json: true
         }
         return rp(artist)
             .then(data => {
-                let emailsSub = this.instance.notification.subscriptorsOnly(artistId);
+                let emailsSub = this.getInstance().getNotification().subscriptorsOnly(artistId);
                 if(emailsSub != undefined){
                     emailsSub.forEach((email: string) => GmailService.sendEmail(
                         `Nuevo album para artista: ${artistId}`,
@@ -124,14 +124,14 @@ export class NotificationController {
     }
 
     public static subscriptions(req: Request, res: Response): Promise<Response> {
-        let artistId: number = req.params.artistId;
+        let artistId: number = req.query.artistId;
         let artist = {
-            uri: `localhost:3000/api/artist/${artistId}`,
+            uri: `http://localhost:3000/api/artists/${artistId}`,
             json: true
         }
         return rp(artist)
             .then(data => {
-                const subs = this.instance.notification.subscriptors(artistId);
+                const subs = this.getInstance().getNotification().subscriptors(artistId);
                 return res.status(200).json(subs);     
             })
             .catch(err => {
@@ -143,12 +143,12 @@ export class NotificationController {
         const notificationI: NotificationInterface = req.body;
         let artistId: number = notificationI.artistId;
         let artist = {
-            uri: `localhost:3000/api/artist/${artistId}`,
+            uri: `http://localhost:3000/api/artists/${artistId}`,
             json: true
         }
         return rp(artist)
             .then(data => {
-                this.instance.notification.deleteSubscriptors(artistId);
+                this.getInstance().getNotification().deleteSubscriptors(artistId);
                 return res.status(200);     
             })
             .catch(err => {
