@@ -7,6 +7,7 @@ import { Track } from "../model/track";
 export class NotificationObserver implements Observer {
     
     public notifyAddAlbum(album:Album): void {
+        console.log('notificar por email')
         this.notifyByEmail(album);
     }
     
@@ -38,14 +39,20 @@ export class NotificationObserver implements Observer {
         let options = {
             body: {
                 "artistId": album.idArtist,
-                "subject": `Nuevo album para artista: ${album.idArtist}`,
+                "subject": `Nuevo album para artista: ${album.name}`,
                 "message": `Se ha agregado el album: ${album.name} al artista ${album.idArtist}`,
                 "from": "UNQfy <UQNfy.notifications@gmail.com>"     
             },
-            uri: `http://localhost:3000/api/notification/notify`,
+            uri: `http://localhost:8000/api/notification/notify`,
             method: 'POST',
             json: true
         }
-            rp(options)   
+        rp(options)
+            .then(data => {
+                console.log(`Se notifico correctamente a los suscriptores del artista '${album.name}'`);
+            })
+            .catch(err => {
+                console.log(err.message);
+            });
     }
 }

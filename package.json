@@ -39,14 +39,14 @@
     "test": "NODE_ENV=DEV mocha -r ts-node/register spec/**/**/*.ts spec/**/*.ts spec/*.ts",
     "eslint": "node_modules/.bin/eslint *.js",
     "server": "ts-node src/main_server.ts",
-    "server_dev": "NODE_ENV=DEV nodemon --ignore 'data.json' src/main_server.ts --exec ts-node",
+    "server_dev": "NODE_ENV=DEV nodemon -i 'data.json' -i 'logger.txt' -i 'notification.json' src/main_server.ts --exec ts-node",
     "auth_spotify": "ts-node src/init_spotify_auth.ts",
     "server_monitor": "ts-node src/main_monitor_server.ts",
-    "server_monitor_dev": "NODE_ENV=DEV nodemon src/main_monitor_server.ts --exec ts-node",
+    "server_monitor_dev": "NODE_ENV=DEV nodemon -i 'data.json' -i 'logger.txt' -i 'notification.json' src/main_monitor_server.ts --exec ts-node",
     "server_log": "ts-node src/main_logging_server.ts",
-    "server_log_dev": "NODE_ENV=DEV nodemon --ignore 'data.json' --ignore 'logger.txt' src/main_logging_server.ts --exec ts-node",
+    "server_log_dev": "NODE_ENV=DEV nodemon -i 'data.json' -i 'logger.txt' -i 'notification.json' src/main_logging_server.ts --exec ts-node",
     "server_notification": "ts-node src/main_server_notificacion.ts",
-    "server_notification_dev": "NODE_ENV=DEV nodemon --ignore 'data.json' --ignore 'logger.txt' src/main_server_notificacion.ts --exec ts-node"
+    "server_notification_dev": "NODE_ENV=DEV nodemon -i 'data.json' -i 'logger.txt' -i 'notification.json' src/main_server_notificacion.ts --exec ts-node"
   },
   "author": "grupo4",
   "license": "ISC"

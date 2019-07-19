@@ -66,6 +66,11 @@ dist/
 logger.txt
 
 data.json
+notification.json
+logger.txt
+credentials.json
+token.json
+
 .vscode/
 
 spotifyCreds.json

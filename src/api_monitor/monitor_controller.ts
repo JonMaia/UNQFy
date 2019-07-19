@@ -7,6 +7,8 @@ export class MonitorController {
     private static enabled: boolean = true;
     private static readonly SERVERS = [
         {name_server: 'Monitor', hostname: 'localhost', port: 5000, enabled: false},
+        {name_server: 'Logging', hostname: 'localhost', port: 4000, enabled: false},
+        {name_server: 'Notification', hostname: 'localhost', port: 8000, enabled: false},
         {name_server: 'UnqFy', hostname: 'localhost', port: 3000, enabled: false}
     ]
 

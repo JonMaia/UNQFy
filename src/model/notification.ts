@@ -1,42 +1,49 @@
 const picklify = require('picklify');
 import fs from 'fs';
+import { Subscription } from './subscription';
 
 export class Notification {
     
-    private id: number;
-    private subscriptions: Map<number, string[]>;
+    private subscriptions: Array<Subscription>;
 
     constructor() {
-        this.id = 0;
-        this.subscriptions = new Map<number, []>();
+        this.subscriptions = new Array();
     }
 
-    public addSubscriptor(artistId: number, email: string){
-        const getEmails: string[] | undefined = this.subscriptions.get(artistId);
-        if(getEmails != undefined){
-            getEmails.push(email);
-            this.subscriptions.set(artistId, getEmails);
+    public addSubscriptor(artistId: number, email: string): void {
+        let subscription: Subscription | undefined = this.findSubscription(artistId);
+        if(!subscription) {
+            subscription = new Subscription(artistId);
+            this.subscriptions.push(subscription);
         }
-    }   
+        subscription.addEmail(email);
+    }
+
+    public findSubscription(artistId: number): Subscription | undefined {
+        return this.subscriptions.find(subscription => subscription.artistId === artistId);
+    }
 
     public unsubscribe(artistId: number, email: string){
-        let getEmails: string [] | undefined = this.subscriptions.get(artistId);
-        if(getEmails != undefined){
-            getEmails = getEmails.filter(e => e == email);
-            this.subscriptions.set(artistId, getEmails);
+        let subscription: Subscription | undefined = this.findSubscription(artistId);
+        if(subscription) {
+            subscription.removeEmail(email);
         }
     }
 
-    public subscriptors(artistId: number){
-        return {artistId: artistId, subscriptors: this.subscriptions.get(artistId)};
+    public subscriptors(artistId: number) {
+        let emails: Array<string> = new Array();
+        let subscription = this.findSubscription(artistId);
+        if(subscription) {
+            emails = subscription.emails;
+        }
+        return { artistId, subscriptors: emails };
     }
 
-    public subscriptorsOnly(artistId: number): Array<string> | undefined{
-        return this.subscriptions.get(artistId);
-    }
-
-    public deleteSubscriptors(artistId: number){
-        this.subscriptions.set(artistId, []);
+    public deleteSubscriptors(artistId: number) {
+        let subscription: Subscription | undefined = this.findSubscription(artistId);
+        if(subscription) {
+            subscription.removeAllEmails();
+        }
     }
 
     public save(filename: string) {
@@ -46,7 +53,7 @@ export class Notification {
 
     public static load(filename: string) {
         const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
-        const classes = [Notification];
+        const classes = [Notification, Subscription];
         return picklify.unpicklify(JSON.parse(serializedData), classes);
     }
 

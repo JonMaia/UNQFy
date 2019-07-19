@@ -8,6 +8,7 @@ import {TrackInterface} from './model/interfaces';
 import { Playlist } from './model/playlist';
 import { Observer } from './observers/observer';
 import { LoggingObserver } from './observers/logging_observer';
+import { NotificationObserver } from './observers/notification_observer';
 
 export class UNQfy {
     
@@ -24,6 +25,7 @@ export class UNQfy {
         this.playLists = new Array();
         this.listeners = new Array();
         this.listeners.push(new LoggingObserver());
+        this.listeners.push(new NotificationObserver());
     }
 
     public getAllArtists(): Array<Artist>{
@@ -416,7 +418,7 @@ export class UNQfy {
     public static load(filename: string) {
         const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
         //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
-        const classes = [UNQfy, Artist, Album, Track, Playlist];
+        const classes = [UNQfy, Artist, Album, Track, Playlist, Observer, NotificationObserver, LoggingObserver];
         return picklify.unpicklify(JSON.parse(serializedData), classes);
     }
 }

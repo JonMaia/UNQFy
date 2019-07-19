@@ -1,11 +1,9 @@
 const fs = require('fs');
-const promisify = require('util').promisify;
+const path = require('path');
 const {google} = require('googleapis');
-const readFile = promisify(fs.readFile)
 
-const CREDENTIALS_PATH = 'credentials.json';
-const TOKEN_PATH = 'token.json';
-
+const CREDENTIALS_PATH = path.join(__dirname, '..', '..', 'credentials.json');
+const TOKEN_PATH = path.join(__dirname, '..', '..', 'token.json');
 
 function getGmailClient() {
     const credentials = fs.readFileSync(CREDENTIALS_PATH);
@@ -23,7 +21,7 @@ function makeCredentials(credentials, token) {
 }
 
 function getOAuthClient(credentials) {
-    oAuth2Client = new google.auth.OAuth2(
+    let oAuth2Client = new google.auth.OAuth2(
         credentials.params.client_id,
         credentials.params.client_secret,
         credentials.params.redirect_uris[0]

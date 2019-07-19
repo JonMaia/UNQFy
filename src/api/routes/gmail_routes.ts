@@ -13,12 +13,10 @@ router.route('/notification/unsubscribe')
       .post(NotificationController.validateData.bind(NotificationController), NotificationController.unsubscribe.bind(NotificationController));
 
 router.route('/notification/notify')
-      .post(NotificationController.validateData.bind(NotificationController), NotificationController.notify.bind(NotificationController));
+      .post(NotificationController.validateEmailData.bind(NotificationController), NotificationController.notify.bind(NotificationController));
 
 router.route('/notification/subscriptions')
-      .get(NotificationController.subscriptions.bind(NotificationController));
-
-router.route('/notification/subscriptions')
-      .delete(NotificationController.validateData.bind(NotificationController), NotificationController.deleteSubscriptions.bind(NotificationController));
+      .get(NotificationController.subscriptions.bind(NotificationController))
+      .delete(NotificationController.deleteSubscriptions.bind(NotificationController));
 
 export default router;
